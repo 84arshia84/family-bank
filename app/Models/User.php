@@ -24,7 +24,6 @@ class User extends Authenticatable
         "phone_number",
         "national_id",
         "password"
-
     ];
 
     /**

@@ -49,4 +49,5 @@ class UserController extends Controller
             'update_user'
         ]);
     }
+
 }
