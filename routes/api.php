@@ -3,6 +3,7 @@
 use App\Http\Controllers\Aths\LoginController;
 use App\Http\Controllers\Aths\logoutController;
 use App\Http\Controllers\Aths\RegisterController;
+use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,12 +33,16 @@ Route::prefix('Auth')->group(function () {
     Route::post('send_sms', [RegisterController::class, 'send_sms'])->name('send_sms');
     Route::post('store',[RegisterController::class,'store'])->name('store');
 
-
 });
 Route::prefix('users')->middleware('auth:sanctum')->group(function () {
     Route::get('all_users', [UserController::class, 'all_users'])->name('all_users');
     Route::post('find_user', [UserController::class, 'find_user'])->name('find_user');
     Route::put('update_user/{id}', [UserController::class, 'update_user'])->name('update_user');
+    Route::post('add_user', [UserController::class, 'add_user'])->name('add_user');
 });
-Route::post('add_user', [UserController::class, 'add_user'])->name('add_user');
 
+
+Route::prefix('bank')->group(function () {
+    Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
+    Route::post('update_Bank_account/{id}', [BankAccountController::class, 'update_Bank_account'])->name('update_Bank_account');
+});
