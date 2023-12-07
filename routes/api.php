@@ -3,6 +3,8 @@
 use App\Http\Controllers\Aths\LoginController;
 use App\Http\Controllers\Aths\logoutController;
 use App\Http\Controllers\Aths\RegisterController;
+use App\Http\Controllers\InstallmentController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,10 +36,20 @@ Route::prefix('Auth')->group(function () {
 
 
 });
-Route::prefix('users')->middleware('auth:sanctum')->group(function () {
+Route::prefix('users')->group(function () {
     Route::get('all_users', [UserController::class, 'all_users'])->name('all_users');
     Route::post('find_user', [UserController::class, 'find_user'])->name('find_user');
     Route::put('update_user/{id}', [UserController::class, 'update_user'])->name('update_user');
 });
 Route::post('add_user', [UserController::class, 'add_user'])->name('add_user');
+
+
+Route::prefix('loan')->group(function () {
+    Route::post('add_loan', [LoanController::class, 'add_loan'])->name('add_loan');
+    Route::post('delete_loan/{id}', [LoanController::class, 'delete_loan'])->name('delete_loan');
+    Route::get('Returning_the_deleted_loan/{id}', [LoanController::class, 'Returning_the_deleted_loan'])->name('Returning_the_deleted_loan');
+    Route::get('List_of_loans', [LoanController::class, 'List_of_loans'])->name('List_of_loans');
+});
+
+Route::get('store', [InstallmentController::class, 'store'])->name('store');
 
