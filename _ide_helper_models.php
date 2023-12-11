@@ -12,6 +12,29 @@
 
 namespace App\Models{
 /**
+ * App\Models\TempCode
+ *
+ * @property int $id
+ * @property string $phone_number
+ * @property string|null $verification_cod
+ * @property string|null $exp_time
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|TempCode newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TempCode newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TempCode query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TempCode whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempCode whereExpTime($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempCode whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempCode wherePhoneNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempCode whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TempCode whereVerificationCod($value)
+ */
+	class TempCode extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\User
  *
  * @property int $id

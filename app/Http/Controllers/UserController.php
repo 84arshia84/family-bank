@@ -31,11 +31,12 @@ class UserController extends Controller
         ]);
     }
 
-    public function find_user(Request $request)
+        public function find_user(Request $request)
     {
-        $user = User::with('orders')->find($request->id);
+        $user = User::find($request->id);
         return response()->json([
-            'find_user' => $user
+            'find_user' => $user,
+            'user_image' => $user->getMedia()
         ]);
 
     }
@@ -49,4 +50,12 @@ class UserController extends Controller
             'update_user'
         ]);
     }
+    public function user_image(Request $request,$user_id)
+    {
+        $user=User::findOrFail($user_id);
+        $img = $user->addMedia($request->image)->toMediaCollection('user'.$user_id);
+        return $img;
+    }
+
+
 }
