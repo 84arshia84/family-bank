@@ -44,5 +44,23 @@ class InstallmentController extends Controller
             }
         }
     }
+    public function find_installment(Request $request)
+    {
+        $installment=Installment::find($request->id);
+        return response()->json([
+            'find_installment' => $installment,
+            'installment_image' => $installment->getMedia()
+        ]);
+    }
+
+
+
+    public function installment_image(Request $request,$installment_id)
+    {
+        $installment=Installment::findOrFail($installment_id);
+        $img = $installment->addMedia($request->image)->toMediaCollection('installment'.$installment_id);
+        return $img;
+    }
+
 
 }

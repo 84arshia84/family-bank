@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_installments', function (Blueprint $table) {
+        Schema::create('installments', function (Blueprint $table) {
             $table->id();
+            $table->integer('user_id');
             $table->string('date_of_payment');//تاریخ پرداخت
             $table->string('Payment_status');// وضعیت پرداخت
             $table->string('cost');//هزینه
             $table->string('loan_id');//id وام
-            $table->id('user_id');
             $table->timestamps();
 
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('_installments');
+        Schema::dropIfExists('installments');
     }
 };

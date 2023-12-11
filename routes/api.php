@@ -35,11 +35,17 @@ Route::prefix('Auth')->group(function () {
     Route::post('store',[RegisterController::class,'store'])->name('store');
 
 
+
 });
 Route::prefix('users')->group(function () {
     Route::get('all_users', [UserController::class, 'all_users'])->name('all_users');
     Route::post('find_user', [UserController::class, 'find_user'])->name('find_user');
     Route::put('update_user/{id}', [UserController::class, 'update_user'])->name('update_user');
+    Route::post('user_image/{id}', [UserController::class, 'user_image'])->name('user_image');
+    Route::get('find_user/{id}',[UserController::class,'find_user'])->name('find_user');
+
+
+
 });
 Route::post('add_user', [UserController::class, 'add_user'])->name('add_user');
 
@@ -51,5 +57,17 @@ Route::prefix('loan')->group(function () {
     Route::get('List_of_loans', [LoanController::class, 'List_of_loans'])->name('List_of_loans');
 });
 
-Route::get('store', [InstallmentController::class, 'store'])->name('store');
 
+
+
+
+
+Route::prefix('loan')->group(function () {
+
+    Route::get('find_installment', [InstallmentController::class, 'find_installment'])->name('find_installment');
+    Route::get('store', [InstallmentController::class, 'store'])->name('store');
+});
+
+
+
+//find_installment

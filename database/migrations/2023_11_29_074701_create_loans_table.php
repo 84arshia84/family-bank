@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title_of_loan');
             $table->string('cost');
             $table->string('description');
-            $table->boolean('status')->default('false');
+            $table->boolean('status')->default(0);
             $table->softDeletes(); // اضافه کردن ستون حذف نرم
             $table->timestamps();
 
