@@ -22,7 +22,8 @@ class InstallmentController extends Controller
     {
         // loan_id
         // loan_cost
-        if ($request->loan_cost >= 10000000) {
+        $request->user()->id;
+        if ($request->loan_cost <= 10000000) {
             $add = 30;
             for ($i = 1; $i <= 6; $i++) {
                 Installment::create([
