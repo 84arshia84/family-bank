@@ -3,6 +3,7 @@
 use App\Http\Controllers\Aths\LoginController;
 use App\Http\Controllers\Aths\logoutController;
 use App\Http\Controllers\Aths\RegisterController;
+use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\UserController;
@@ -33,11 +34,12 @@ Route::prefix('Auth')->group(function () {
     Route::post('create_user', [RegisterController::class, 'create_user'])->name('create_user');
     Route::post('send_sms', [RegisterController::class, 'send_sms'])->name('send_sms');
     Route::post('store',[RegisterController::class,'store'])->name('store');
-
-
+    Route::post('Add_photo_of_national_card/{id}',[RegisterController::class,'Add_photo_of_national_card'])->name('Add_photo_of_national_card');
+    Route::post('find_user',[RegisterController::class,'find_user'])->name('find_user');
 
 });
 Route::prefix('users')->group(function () {
+    Route::post('add_user', [UserController::class, 'add_user'])->name('add_user');
     Route::get('all_users', [UserController::class, 'all_users'])->name('all_users');
     Route::post('find_user', [UserController::class, 'find_user'])->name('find_user');
     Route::put('update_user/{id}', [UserController::class, 'update_user'])->name('update_user');
@@ -47,7 +49,7 @@ Route::prefix('users')->group(function () {
 
 
 });
-Route::post('add_user', [UserController::class, 'add_user'])->name('add_user');
+
 
 
 Route::prefix('loan')->group(function () {
@@ -62,12 +64,18 @@ Route::prefix('loan')->group(function () {
 
 
 
-Route::prefix('loan')->group(function () {
+Route::prefix('installment')->group(function () {
 
     Route::get('find_installment', [InstallmentController::class, 'find_installment'])->name('find_installment');
     Route::get('store', [InstallmentController::class, 'store'])->name('store');
 });
 
+Route::prefix('bank')->group(function () {
+
+    Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
+    Route::post('update_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
+
+});
 
 
 //find_installment

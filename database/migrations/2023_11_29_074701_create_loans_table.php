@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
             $table->string('title_of_loan');
-            $table->string('cost');
+            $table->string('amount');
             $table->string('description');
-            $table->boolean('status')->default(0);
+            $table->enum('status',['Pending','accept','reject'])->default('Pending');
             $table->softDeletes(); // اضافه کردن ستون حذف نرم
+            $table->integer('user_id');
             $table->timestamps();
 
         });
