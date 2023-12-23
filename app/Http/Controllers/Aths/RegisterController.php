@@ -50,11 +50,28 @@ class RegisterController extends Controller
             'phone_number' => 'required|string|max:11|unique:users',
             'national_id' => 'required',
             'password' => '',
+            'img' => 'required|image',
         ]);
         $user = User::create($request->all());
         return response()->json(['user' => $user
         ]);
 
+    }
+
+    public function find_user(Request $request)
+    {
+        $user = User::find($request->id);
+        return response()->json([
+            'find_user' => $user,
+            'national_id_image' => $user->getMedia()
+        ]);
+    }
+
+    public function Add_photo_of_national_card(Request $request, $user_id)
+    {
+        $user = User::findOrFail($user_id);
+        $img = $user->addMedia($request->image)->toMediaCollection('national card'.$user_id);
+        return $img;
     }
 
     public function Add_password(Request $request, $id)
@@ -97,7 +114,7 @@ class RegisterController extends Controller
         $status = TempCode::where('phone_number', $request->phone_number)->where('verification_cod', $request->verification_cod)->first();
         {
             if ($status != null) {
-                return response()->json( 'کد تایید شد');
+                return response()->json('کد تایید شد');
             } else {
                 return response()->json('کد اشتباه است');
             }
