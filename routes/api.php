@@ -4,8 +4,10 @@ use App\Http\Controllers\Aths\LoginController;
 use App\Http\Controllers\Aths\logoutController;
 use App\Http\Controllers\Aths\RegisterController;
 use App\Http\Controllers\BankAccountController;
+
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\LoanController;
+
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,8 +36,10 @@ Route::prefix('Auth')->group(function () {
     Route::post('create_user', [RegisterController::class, 'create_user'])->name('create_user');
     Route::post('send_sms', [RegisterController::class, 'send_sms'])->name('send_sms');
     Route::post('store',[RegisterController::class,'store'])->name('store');
+
     Route::post('Add_photo_of_national_card/{id}',[RegisterController::class,'Add_photo_of_national_card'])->name('Add_photo_of_national_card');
     Route::post('find_user',[RegisterController::class,'find_user'])->name('find_user');
+
 
 });
 Route::prefix('users')->group(function () {
@@ -43,6 +47,16 @@ Route::prefix('users')->group(function () {
     Route::get('all_users', [UserController::class, 'all_users'])->name('all_users');
     Route::post('find_user', [UserController::class, 'find_user'])->name('find_user');
     Route::put('update_user/{id}', [UserController::class, 'update_user'])->name('update_user');
+
+    Route::post('add_user', [UserController::class, 'add_user'])->name('add_user');
+});
+
+
+Route::prefix('bank')->group(function () {
+    Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
+    Route::post('update_Bank_account/{id}', [BankAccountController::class, 'update_Bank_account'])->name('update_Bank_account');
+});
+
     Route::post('user_image/{id}', [UserController::class, 'user_image'])->name('user_image');
     Route::get('find_user/{id}',[UserController::class,'find_user'])->name('find_user');
 
@@ -79,3 +93,4 @@ Route::prefix('bank')->group(function () {
 
 
 //find_installment
+
