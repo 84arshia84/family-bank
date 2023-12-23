@@ -62,7 +62,7 @@ Route::prefix('bank')->group(function () {
 
 
 
-});
+
 
 
 
