@@ -36,7 +36,6 @@ Route::prefix('Auth')->group(function () {
     Route::post('create_user', [RegisterController::class, 'create_user'])->name('create_user');
     Route::post('send_sms', [RegisterController::class, 'send_sms'])->name('send_sms');
     Route::post('store',[RegisterController::class,'store'])->name('store');
-
     Route::post('Add_photo_of_national_card/{id}',[RegisterController::class,'Add_photo_of_national_card'])->name('Add_photo_of_national_card');
     Route::post('find_user',[RegisterController::class,'find_user'])->name('find_user');
 
@@ -47,30 +46,24 @@ Route::prefix('users')->group(function () {
     Route::get('all_users', [UserController::class, 'all_users'])->name('all_users');
     Route::post('find_user', [UserController::class, 'find_user'])->name('find_user');
     Route::put('update_user/{id}', [UserController::class, 'update_user'])->name('update_user');
-
     Route::post('add_user', [UserController::class, 'add_user'])->name('add_user');
+    Route::post('user_image/{id}', [UserController::class, 'user_image'])->name('user_image');
+    Route::get('find_user/{id}',[UserController::class,'find_user'])->name('find_user');
 });
-
 
 Route::prefix('bank')->group(function () {
     Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
     Route::post('update_Bank_account/{id}', [BankAccountController::class, 'update_Bank_account'])->name('update_Bank_account');
+
 });
-
-    Route::post('user_image/{id}', [UserController::class, 'user_image'])->name('user_image');
-    Route::get('find_user/{id}',[UserController::class,'find_user'])->name('find_user');
-
-
-
-
-
-
 
 Route::prefix('loan')->group(function () {
     Route::post('add_loan', [LoanController::class, 'add_loan'])->name('add_loan');
     Route::post('delete_loan/{id}', [LoanController::class, 'delete_loan'])->name('delete_loan');
     Route::get('Returning_the_deleted_loan/{id}', [LoanController::class, 'Returning_the_deleted_loan'])->name('Returning_the_deleted_loan');
     Route::get('List_of_loans', [LoanController::class, 'List_of_loans'])->name('List_of_loans');
+    Route::put('update_status/{id}', [LoanController::class, 'update_status'])->name('update_status');
+
 });
 
 
@@ -79,13 +72,14 @@ Route::prefix('loan')->group(function () {
 
 
 Route::prefix('installment')->group(function () {
-
     Route::get('find_installment', [InstallmentController::class, 'find_installment'])->name('find_installment');
     Route::get('store', [InstallmentController::class, 'store'])->name('store');
+    Route::post('Bank_receipt_photo/{loan_id}', [InstallmentController::class, 'Bank_receipt_photo'])->name('Bank_receipt_photo');
+
+
 });
 
 Route::prefix('bank')->group(function () {
-
     Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
     Route::post('update_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
 

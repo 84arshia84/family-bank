@@ -13,7 +13,7 @@ class LoanController extends Controller
         $request->validate([
             'title_of_loan' => 'required|string|max:100',
             'amount' => 'required|string|max:100',
-            'description' => 'required|string',
+            'description' => 'required',
             'user_id' => 'required|exists:users,id'
         ]);
         $loan = Loan::create($request->all());
@@ -33,7 +33,7 @@ class LoanController extends Controller
         $loan->restore(); // بازگرداندن کاربر به حالت قبلی
     }
 
-    public function List_of_loans(Request $request)
+    public function List_of_loans()
     {
         $loan = Loan::all();
         return response()->json([
@@ -42,12 +42,30 @@ class LoanController extends Controller
         ]);
     }
 
-    public function loan_check(Request $request)
+    public function loan_check(Request $request,$id)
     {
-        $load = Loan::find($request->id);
+        $load = Loan::find($id);
         $load->update(['status'=>$request->status]);
     }
 
+
+    public function update_status(Request $request, $id)
+    {
+        // Validate the request input
+        $request->validate([
+            'status' => 'required|in:accept,reject'
+        ]);
+
+        // Find the order by id
+        $loan = Loan::findOrFail($id);
+
+        // Update the status field
+        $loan->status = $request->status;
+        $loan->save();
+
+        // Return a success message or redirect to another page
+        return response()->json(['message' => 'Loan status updated successfully']);
+    }
 
 //
 //// این متد یک وام جدید را با استفاده از اطلاعات درخواست کاربر ایجاد می‌کند

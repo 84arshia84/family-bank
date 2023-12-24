@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title_of_loan');
             $table->string('amount');
-            $table->string('description');
+            $table->longText('description');
             $table->enum('status',['Pending','accept','reject'])->default('Pending');
             $table->softDeletes(); // اضافه کردن ستون حذف نرم
             $table->integer('user_id');
