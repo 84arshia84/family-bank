@@ -47,12 +47,18 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'family' => 'required|string|max:255',
             'father_name' => 'required|string|max:255',
+            'email'=> 'required|string|max:255',
             'phone_number' => 'required|string|max:11|unique:users',
             'national_id' => 'required',
             'password' => '',
-            'img' => 'required|image',
+            'img' => 'required|image|mimes:jpg,png|max:10240',
         ]);
         $user = User::create($request->all());
+        if ($request->hasFile('img'))
+        {
+            $user->addMediaFromRequest('img')->toMediaCollection('national_card_email');
+            $user->load('media');
+        }
         return response()->json(['user' => $user
         ]);
 
@@ -67,16 +73,16 @@ class RegisterController extends Controller
         ]);
     }
 
-    public function Add_photo_of_national_card(Request $request, $user_id)
-    {
-        $user = User::findOrFail($user_id);
-        $img = $user->addMedia($request->image)->toMediaCollection('national card'.$user_id);
-        return $img;
-    }
+//    public function Add_photo_of_national_card(Request $request, $user_id)
+//    {
+//        $user = User::findOrFail($user_id);
+//        $img = $user->addMedia($request->image)->toMediaCollection('national card'.$user_id);
+//        return $img;
+//    }
 
     public function Add_password(Request $request, $id)
     {
-        $user = User::find($id);
+        $user = User::with('media')->find($id);
         $user->update($request->all());
         $user->save();
         return response()->json([
@@ -96,7 +102,7 @@ class RegisterController extends Controller
 //        ]);
 //        $user = User::update($request->all());
 //        $user = User::update($request->all());
-        $user = User::find($id);
+        $user = User::with('media')->find($id);
         $user->update($request->all());
         $user->save();
         $token = $user->createToken('api_token')->plainTextToken;

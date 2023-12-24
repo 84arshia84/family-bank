@@ -17,6 +17,7 @@ class UserController extends Controller
             'phone_number' => 'required|string|max:255|unique:users',
             'national_id' => 'required',
             'password' => 'required|string|min:6',
+            'img' => 'required|image|mimes:jpg,png|max:10240',
         ]);
         $user = User::create($request->all());
         return response()->json([
@@ -44,18 +45,23 @@ class UserController extends Controller
     public function update_user(Request $request, $id)
     {
         $user = User::find($id);
+        if ($request->hasFile('img'))
+        {
+            $user->addMediaFromRequest('img')->toMediaCollection('add_avatar_for_user');
+            $user->load('media');
+        }
         $user->update($request->all());
         $user->save();
         return response()->json([
             'update_user'
         ]);
     }
-    public function user_image(Request $request,$user_id)
-    {
-        $user=User::findOrFail($user_id);
-        $img = $user->addMedia($request->image)->toMediaCollection('user'.$user_id);
-        return $img;
-    }
-
+//    public function user_image(Request $request,$user_id)
+//    {
+//        $user=User::findOrFail($user_id);
+//        $img = $user->addMedia($request->image)->toMediaCollection('user'.$user_id);
+//        return $img;
+//    }
+//
 
 }
