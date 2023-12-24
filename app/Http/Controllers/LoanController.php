@@ -17,7 +17,7 @@ class LoanController extends Controller
             'user_id' => 'required|exists:users,id'
         ]);
         $loan = Loan::create($request->all());
-        return response()->json(['The loan was registered  ' => $loan
+        return response()->json(['The loan application was registered  ' => $loan
         ]);
     }
 
