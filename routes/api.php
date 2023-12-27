@@ -32,7 +32,7 @@ Route::prefix('Auth')->group(function () {
     Route::post('Add_password/{id}',[RegisterController::class,'Add_password'])->name('Add_password');
     Route::post('register/{id}', [RegisterController::class, 'register'])->name('register');
     Route::post('login', LoginController::class)->name('login');                // ok
-    Route::post('logout', LogoutController::class)->name('logout');
+    Route::middleware('auth:sanctum')->post('logout', LogoutController::class)->name('logout');
     Route::post('create_user', [RegisterController::class, 'create_user'])->name('create_user');
     Route::post('send_sms', [RegisterController::class, 'send_sms'])->name('send_sms');
     Route::post('store',[RegisterController::class,'store'])->name('store');
