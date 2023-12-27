@@ -81,7 +81,7 @@ Route::prefix('installment')->group(function () {
 });
 
 Route::prefix('bank')->group(function () {
-    Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
+    Route::post('add-bank-account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
     Route::post('update_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
 
 });
