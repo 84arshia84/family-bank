@@ -10,23 +10,21 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     */
-    public function __invoke(Request $request)
+    public function login(Request $request)
     {
-        $user = User::where('phone_number', $request->phone_number)->first();
-        if (!$user || !Hash::check($request->password, $user->password))
         {
-            throw ValidationException::withMessages([
-                'password is not true'
+            $user = User::where('phone_number', $request->phone_number)->first();
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'password is not true'
+                ]);
+            }
+            $token = $user->createToken('api_token')->plainTextToken;
+            return response()->json([
+                'user' => $user,
+                'token' => $token,
             ]);
         }
-        $token = $user->createToken('api_token')->plainTextToken;
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ]);
     }
-}
 
+}
