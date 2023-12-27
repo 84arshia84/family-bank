@@ -63,6 +63,7 @@ Route::prefix('loan')->group(function () {
     Route::get('Returning_the_deleted_loan/{id}', [LoanController::class, 'Returning_the_deleted_loan'])->name('Returning_the_deleted_loan');
     Route::get('List_of_loans', [LoanController::class, 'List_of_loans'])->name('List_of_loans');
     Route::put('update_status/{id}', [LoanController::class, 'update_status'])->name('update_status');
+    Route::post('date_of_loan/{id}', [LoanController::class, 'date_of_loan'])->name('date_of_loan');
 
 });
 

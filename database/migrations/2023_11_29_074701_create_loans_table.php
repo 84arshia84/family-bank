@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('amount');
             $table->longText('description');
             $table->enum('status',['Pending','accept','reject'])->default('Pending');
+            $table->timestamp('date_of_loan');
             $table->softDeletes(); // اضافه کردن ستون حذف نرم
             $table->integer('user_id');
             $table->timestamps();

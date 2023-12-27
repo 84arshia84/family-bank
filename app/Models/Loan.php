@@ -11,20 +11,24 @@ use Illuminate\Notifications\Notifiable;
 
 class Loan extends Model
 {
-    use HasFactory, Notifiable, SoftDeletes; // استفاده از تریت حذف نرم
-    protected $fillable =[
-        'description',
-        'amount',
+    use HasFactory, Notifiable, SoftDeletes;
+
+    // استفاده از تریت حذف نرم
+    protected $fillable = [
         'title_of_loan',
+        'amount',
+        'description',
+        'status',
+        'date_of_loan',
         'user_id',
     ];
 
 
-
-    public function installments ():HasMany
+    public function installments(): HasMany
     {
         return $this->hasMany(Installment::class);
     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

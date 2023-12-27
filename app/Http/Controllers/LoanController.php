@@ -14,7 +14,8 @@ class LoanController extends Controller
             'title_of_loan' => 'required|string|max:100',
             'amount' => 'required|string|max:100',
             'description' => 'required',
-            'user_id' => 'required|exists:users,id'
+            'user_id' => 'required|exists:users,id',
+
         ]);
         $loan = Loan::create($request->all());
         return response()->json(['The loan application was registered  ' => $loan
@@ -55,7 +56,6 @@ class LoanController extends Controller
         $request->validate([
             'status' => 'required|in:accept,reject'
         ]);
-
         // Find the order by id
         $loan = Loan::findOrFail($id);
 
@@ -66,8 +66,19 @@ class LoanController extends Controller
         // Return a success message or redirect to another page
         return response()->json(['message' => 'Loan status updated successfully']);
     }
-
+    public function date_of_loan(Request $request, $id)
+    {
+        // Validate the request input
+        $request->validate([
+                'date_of_loan'=>'required|date_format:Y-m-d'
+        ]);
+        $loan=Loan::findOrFail($id);
+        $loan->date_of_loan=$request->date_of_loan;
+        $loan->save();
+        return response()->json(['message' =>$loan]);
 //
+
+}}
 //// این متد یک وام جدید را با استفاده از اطلاعات درخواست کاربر ایجاد می‌کند
 //// و سپس برای آن وام چند قسط نیز ایجاد می‌کند
 //public function create_loan(Request $request)
@@ -145,4 +156,3 @@ class LoanController extends Controller
 //        'user' => $installment->user // از رابطه belongs-to بین مدل‌های installment و user استفاده می‌کنیم
 //    ]);
 //}
-}

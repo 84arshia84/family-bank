@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Installment;
+use App\Models\Loan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -23,12 +24,17 @@ class InstallmentController extends Controller
         // loan_id
         // loan_cost
         $request->user()->id;
+        // پیدا کردن وام با شناسه درخواست
+        $loan = Loan::findOrFail($request->loan_id);
+        // گرفتن تاریخ وام از مدل وام
+        $date_of_loan = $loan->date_of_loan;
         if ($request->loan_cost <= 10000000) {
             $add = 30;
             for ($i = 1; $i <= 6; $i++) {
                 Installment::create([
                     "Price" => $request->prise,
-                    "date_of_payment" => Carbon::now()->addDay($add),
+                    // اضافه کردن روزها به تاریخ وامل
+                    "date_of_payment" => $date_of_loan->addDay($add),
                     "cost" => $request->cost / 6,
                     "loan_id" => $request->input("loan_id")
                 ]);
@@ -38,7 +44,8 @@ class InstallmentController extends Controller
             for ($i = 1; $i <= 12; $i++) {
                 Installment::create([
                     "Price" => $request->prise,
-                    "date_of_payment" => Carbon::now()->addDay(30),
+                    // اضافه کردن روزها به تاریخ وامل
+                    "date_of_payment" => $date_of_loan->addDay(30),
                     "cost" => $request->cost / 12,
                     "loan_id" => $request->input("loan_id")
                 ]);
