@@ -53,7 +53,9 @@ class RegisterController extends Controller
             'password' => '',
             'img' => 'required|image|mimes:jpg,png|max:10240',
         ]);
-        $user = User::create($request->all());
+        $user = User::create($request->merge([
+            "password" => null
+        ])->toArray());
         if ($request->hasFile('img'))
         {
             $user->addMediaFromRequest('img')->toMediaCollection('national_card_email');
