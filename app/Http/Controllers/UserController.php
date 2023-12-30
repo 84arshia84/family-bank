@@ -14,7 +14,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'family' => 'required|string|max:255',
             'fatherName' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:255|unique:users',
+            'phone_number' => 'required|string|nullable|max:255|unique:users',
             'national_id' => 'required',
             'password' => 'required|string|min:6',
             'img' => 'required|image|mimes:jpg,png|max:10240',
