@@ -21,7 +21,8 @@ class RegisterController extends Controller
             'exp_time' => $timeValid,
         ]);
         $this->send_sms($request, $rand);
-        return response()->json(['phone_number']);    // Change text
+        // اینجا باید متغیر 'phone_number' را به عنوان یک آرایه برگردانید
+        return response()->json(['phone_number' => $request->phone_number]);    // Change text
     }
 
     protected function send_sms(Request $request, $rand)
@@ -31,8 +32,9 @@ class RegisterController extends Controller
             "rand" => $rand
         ];
 
+        // اینجا باید مقدار 'qk9hlr3czoqct8t' را با کد الگوی پیامک خود جایگزین کنید
         $messageId = $client->sendPattern(
-            "qk9hlr3czoqct8t",
+            "your-pattern-code", // باید کد الگوی پیامک خود را وارد کنید
             "+983000505",      // originator
             $request->phone_number,  // recipient
             $patternValues  // pattern values
@@ -47,21 +49,21 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'family' => 'required|string|max:255',
             'father_name' => 'required|string|max:255',
-            'email'=> 'required|string|max:255',
-            'phone_number' => 'required|string|max:11|unique:users',
             'national_id' => 'required',
             'password' => '',
             'img' => 'required|image|mimes:jpg,png|max:10240',
         ]);
+        // اینجا باید پرانتز بسته را از انتهای خط حذف کنید
         $user = User::create($request->merge([
             "password" => null
-        ])->toArray());
+        ])->except(['phone_number', 'email'])); // حذف پرانتز بسته
         if ($request->hasFile('img'))
         {
             $user->addMediaFromRequest('img')->toMediaCollection('national_card_email');
             $user->load('media');
         }
-        return response()->json(['user' => $user
+        // اینجا باید کاربر را با حذف فیلد‌های شماره تلفن و ایمیل برگردانید
+        return response()->json(['user' => $user->makeHidden(['phone_number', 'email']) // اضافه کردن makeHidden
         ]);
 
     }
@@ -75,12 +77,6 @@ class RegisterController extends Controller
         ]);
     }
 
-//    public function Add_photo_of_national_card(Request $request, $user_id)
-//    {
-//        $user = User::findOrFail($user_id);
-//        $img = $user->addMedia($request->image)->toMediaCollection('national card'.$user_id);
-//        return $img;
-//    }
 
     public function Add_password(Request $request, $id)
     {
@@ -130,4 +126,3 @@ class RegisterController extends Controller
 
     }
 }
-
