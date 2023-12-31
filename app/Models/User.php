@@ -9,13 +9,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Stephenjude\Wallet\Interfaces\Wallet;
+use Stephenjude\Wallet\Traits\HasWallet;
 
-class User extends Authenticatable implements HasMedia
+
+class User extends Authenticatable implements HasMedia, Wallet
 {
-    use HasApiTokens, HasFactory, Notifiable,InteractsWithMedia;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, HasWallet;
 
     protected $guard_name = 'sanctum';
     /**
@@ -56,7 +58,8 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Loan::class);
     }
-    public function wallet ():HasOne
+
+    public function wallet(): HasOne
     {
         return $this->hasOne(Wallet::class);
     }

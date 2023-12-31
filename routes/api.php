@@ -9,6 +9,7 @@ use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\LoanController;
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -86,4 +87,9 @@ Route::prefix('bank')->group(function () {
 });
 
 //find_installment
+Route::prefix('wallet')->group(function () {
+    Route::post('wallet/{user}', [WalletController::class, 'wallet'])->name('wallet');
+    Route::post('add_wallet/{user}', [WalletController::class, 'add_wallet'])->name('add_wallet');
+    Route::post('harvest_wallet/{user}', [WalletController::class, 'harvest_wallet'])->name('harvest_wallet');
 
+});
