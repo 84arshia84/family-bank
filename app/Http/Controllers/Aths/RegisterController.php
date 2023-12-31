@@ -39,10 +39,7 @@ class RegisterController extends Controller
             $request->phone_number,  // recipient
             $patternValues  // pattern values
         );
-
-
     }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -65,9 +62,7 @@ class RegisterController extends Controller
         // اینجا باید کاربر را با حذف فیلد‌های شماره تلفن و ایمیل برگردانید
         return response()->json(['user' => $user->makeHidden(['phone_number', 'email']) // اضافه کردن makeHidden
         ]);
-
     }
-
     public function find_user(Request $request)
     {
         $user = User::find($request->id);
@@ -76,10 +71,12 @@ class RegisterController extends Controller
             'national_id_image' => $user->getMedia()
         ]);
     }
-
-
     public function Add_password(Request $request, $id)
     {
+        // اضافه کردن قانون اعتبارسنجی confirmed
+        $request->validate([
+            'password' => 'required|min:6|confirmed',
+        ]);
         $user = User::with('media')->find($id);
         $user->update($request->all());
         $user->save();
@@ -87,19 +84,9 @@ class RegisterController extends Controller
             $user
         ]);
     }
-
     public function register(Request $request, $id)
     {
-//        $request->validate([
-//            'name' => 'required|string|max:255',
-//            'family' => 'required|string|max:255',
-//            'father_name' => 'required|string|max:255',
-//            'phone_number' => 'required|string|max:11|unique:users',
-//            'national_id' => 'required',
-//            'password' => 'required|string|min:6',
-//        ]);
-//        $user = User::update($request->all());
-//        $user = User::update($request->all());
+
         $user = User::with('media')->find($id);
         $user->update($request->all());
         $user->save();
@@ -109,12 +96,9 @@ class RegisterController extends Controller
             'token' => $token,
         ]);
     }
-
     public function check(Request $request)
     {
         $Code_confirmation_time = Carbon::now();
-
-
         $status = TempCode::where('phone_number', $request->phone_number)->where('verification_cod', $request->verification_cod)->first();
         {
             if ($status != null) {
@@ -123,6 +107,5 @@ class RegisterController extends Controller
                 return response()->json('کد اشتباه است');
             }
         }
-
     }
 }
