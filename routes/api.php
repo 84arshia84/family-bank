@@ -7,6 +7,7 @@ use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\paymentController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Http\Request;
@@ -89,5 +90,7 @@ Route::prefix('wallet')->group(function () {
     Route::post('harvest_wallet/{user}', [WalletController::class, 'harvest_wallet'])->name('harvest_wallet');
 
 });
-Route::get('/callback', [\App\Http\Controllers\TransactionController::class, 'callback'])->name('payment.callback');
-Route::post('pay/{id}', [\App\Http\Controllers\TransactionController::class, 'pay']);
+Route::prefix('transaction')->group(function () {
+Route::get('/callback', [TransactionController::class, 'callback'])->name('payment.callback');
+Route::post('pay/{id}', [TransactionController::class, 'pay']);
+});
