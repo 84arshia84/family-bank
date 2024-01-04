@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Installment;
 use App\Models\Loan;
-use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class InstallmentController extends Controller
@@ -19,13 +19,13 @@ class InstallmentController extends Controller
 //        }
 //    }
 
-    public function store(Request $request)
+    public function store(Request $request, $loan_id)
     {
         // loan_id
         // loan_cost
         $request->user()->id;
         // پیدا کردن وام با شناسه درخواست
-        $loan = Loan::findOrFail($request->loan_id);
+        $loan = Loan::findOrFail($loan_id);
         // گرفتن تاریخ وام از مدل وام
         $date_of_loan = $loan->date_of_loan;
         if ($request->loan_cost <= 10000000) {
@@ -62,11 +62,20 @@ class InstallmentController extends Controller
         ]);
     }
 
-        public function Bank_receipt_photo(Request $request,$loan_id)
+    public function Bank_receipt_photo(Request $request, $loan_id)
     {
         $installment = Installment::findOrFail($loan_id);
         $img = $installment->addMedia($request->image)->toMediaCollection('Bank_receipt_photo' . $loan_id);
         return $img;
+    }
+
+    public function all_installment($user_id)
+    {
+        $installment=User::with('loans.installments')->find($user_id);
+        return response()->json([
+            'data' => $installment
+        ]);
+
     }
 
 

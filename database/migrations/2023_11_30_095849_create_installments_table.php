@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('installments', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->bigInteger('loan_id');//id وام
             $table->string('date_of_payment');//تاریخ پرداخت
-            $table->string('Payment_status');// وضعیت پرداخت
+            $table->enum('Payment_status',['Paid','unpaid'])->default('unpaid');// وضعیت پرداخت
             $table->string('cost');//هزینه
             $table->enum('status',['current_installments','Deferred_installments','Installments_paid'])->default('current_installments');
-            $table->string('loan_id');//id وام
             $table->timestamps();
 
         });

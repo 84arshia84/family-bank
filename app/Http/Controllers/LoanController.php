@@ -2,25 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Installment;
 use App\Models\Loan;
 use Illuminate\Http\Request;
 
 class LoanController extends Controller
 {
 
-    public function add_loan(Request $request)
+    public function add_loan(Request $request, $count)
     {
-        $request->validate([
+        $data = $request->validate([
             'title_of_loan' => 'required|string|max:100',
             'amount' => 'required|string|max:100',
             'description' => 'required',
             'user_id' => 'required|exists:users,id',
-
         ]);
-        $loan = Loan::create($request->all());
+        $loan = Loan::create($data);
+
         return response()->json(['The loan application was registered  ' => $loan
         ]);
     }
+
+    public function createInstallment(Request $request, $loan_id, $count)
+    {
+
+
+    }
+
 
     public function delete_loan($id)
     {
@@ -43,10 +51,10 @@ class LoanController extends Controller
         ]);
     }
 
-    public function loan_check(Request $request,$id)
+    public function loan_check(Request $request, $id)
     {
         $load = Loan::find($id);
-        $load->update(['status'=>$request->status]);
+        $load->update(['status' => $request->status]);
     }
 
 
@@ -66,19 +74,37 @@ class LoanController extends Controller
         // Return a success message or redirect to another page
         return response()->json(['message' => 'Loan status updated successfully']);
     }
+
     public function date_of_loan(Request $request, $id)
     {
         // Validate the request input
         $request->validate([
-                'date_of_loan'=>'required|date_format:Y-m-d'
+            'date_of_loan' => 'required|date_format:Y-m-d',
+            'count' => 'required|integer'
         ]);
-        $loan=Loan::findOrFail($id);
-        $loan->date_of_loan=$request->date_of_loan;
+        $loan = Loan::findOrFail($id);
+        $loan->date_of_loan = $request->date_of_loan;
         $loan->save();
-        return response()->json(['message' =>$loan]);
+        // loan_id
+        // loan_cost
+        // پیدا کردن وام با شناسه درخواست
+        // گرفتن تاریخ وام از مدل وام
+        $date_of_loan = $loan->date_of_loan;
+        $add = 30;
+        for ($i = 1; $i <= $request->count; $i++) {
+            Installment::create([
+                // اضافه کردن روزها به تاریخ وامل
+                "date_of_payment" => $date_of_loan->addDay($add),
+                "cost" => $loan->amount / $request->count,
+                "loan_id" => $loan->id
+            ]);
+            $add += 30;
+        }
+        return response()->json(['message' => $loan]);
 //
 
-}}
+    }
+}
 //// این متد یک وام جدید را با استفاده از اطلاعات درخواست کاربر ایجاد می‌کند
 //// و سپس برای آن وام چند قسط نیز ایجاد می‌کند
 //public function create_loan(Request $request)
