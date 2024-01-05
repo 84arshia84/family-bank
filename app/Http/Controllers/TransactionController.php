@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Installment;
 use App\Models\Transaction;
+use App\Models\User;
 use Evryn\LaravelToman\CallbackRequest;
 use Evryn\LaravelToman\Facades\Toman;
 use Illuminate\Http\Request;
@@ -93,7 +94,7 @@ class TransactionController extends Controller
             // برگرداندن تراکنش به عنوان پاسخ
             return response()->json(['transaction' => $transaction]);
         }
-        if ($payment->alreadyVerified()){
+        if ($payment->alreadyVerified()) {
             // به‌روزرسانی تراکنش با پیام‌های خطا و وضعیت ناموفق
             $transaction->forceFill([
                 'gateway_result->messages' => $payment->messages(),
@@ -104,6 +105,22 @@ class TransactionController extends Controller
             // برگرداندن تراکنش به عنوان پاسخ
             return response()->json(['transaction' => $transaction]);
         }
+    }
+    public function showUserTransactions($userId)
+    {
+        // یافتن کاربر
+        $user = User::find($userId);
+
+        // اگر کاربر پیدا شد
+        if ($user) {
+            // گرفتن تراکنش‌های کاربر
+            $transactions = $user->transactions()->latest()->get();
+
+            // ارسال تراکنش‌ها به نمایش
+            return response()->json([$transactions]);
+        }
+        // اگر کاربر پیدا نشد
+        return "کاربر مورد نظر یافت نشد.";
     }
 
 }

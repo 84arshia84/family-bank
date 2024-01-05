@@ -42,7 +42,7 @@ Route::prefix('Auth')->group(function () {
 
 
 });
-Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
+Route::group(['prefix' => 'users', 'as' => 'user.','middleware'=>'auth:sanctum'], function () {
     Route::post('add_user', [UserController::class, 'add_user'])->name('add');
     Route::get('all_users', [UserController::class, 'all_users'])->name('all');
     Route::post('find_user', [UserController::class, 'find_user'])->name('find');
@@ -50,14 +50,12 @@ Route::group(['prefix' => 'users', 'as' => 'user.'], function () {
     Route::post('user_image/{id}', [UserController::class, 'user_image'])->name('image');
     Route::get('find_user/{id}', [UserController::class, 'find_user'])->name('find');
 });
-
-Route::prefix('bank')->group(function () {
+Route::group(['prefix' => 'bank','middleware'=>'auth:sanctum'], function () {
     Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
     Route::post('update_Bank_account/{id}', [BankAccountController::class, 'update_Bank_account'])->name('update_Bank_account');
 
 });
-
-Route::prefix('loan')->group(function () {
+Route::group(['prefix' => 'loan','middleware'=>'auth:sanctum'], function () {
     Route::post('add_loan/{count}', [LoanController::class, 'add_loan'])->name('add_loan');
     Route::post('delete_loan/{id}', [LoanController::class, 'delete_loan'])->name('delete_loan');
     Route::get('Returning_the_deleted_loan/{id}', [LoanController::class, 'Returning_the_deleted_loan'])->name('Returning_the_deleted_loan');
@@ -67,30 +65,27 @@ Route::prefix('loan')->group(function () {
 
 });
 
+Route::group(['prefix' => 'installment','middleware'=>'auth:sanctum'], function () {
 
-Route::prefix('installment')->group(function () {
     Route::get('find_installment/{id}', [InstallmentController::class, 'find_installment'])->name('find_installment');
     Route::get('all_installment/{user_id}', [InstallmentController::class, 'all_installment'])->name('all_installment');
     //Route::post('store', [InstallmentController::class, 'store'])->name('store');
     Route::post('Bank_receipt_photo/{loan_id}', [InstallmentController::class, 'Bank_receipt_photo'])->name('Bank_receipt_photo');
 
-
 });
-
-Route::prefix('bank')->group(function () {
-    Route::post('add-bank-account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
-    Route::post('update_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
-
-});
+    Route::group(['prefix' => 'wallet','middleware'=>'auth:sanctum'], function () {
 
 //find_installment
-Route::prefix('wallet')->group(function () {
     Route::post('wallet/{user}', [WalletController::class, 'wallet'])->name('wallet');
     Route::post('add_wallet/{user}', [WalletController::class, 'add_wallet'])->name('add_wallet');
     Route::post('harvest_wallet/{user}', [WalletController::class, 'harvest_wallet'])->name('harvest_wallet');
 
 });
-Route::prefix('transaction')->group(function () {
+
+    Route::group(['prefix' => 'transaction'], function () {
+
 Route::get('/callback', [TransactionController::class, 'callback'])->name('payment.callback');
-Route::post('pay/{id}', [TransactionController::class, 'pay']);
+Route::post('pay/{id}', [TransactionController::class, 'pay'])->name('pay');;
+Route::get('showUserTransactions/{userId}', [TransactionController::class, 'showUserTransactions'])->name('showUserTransactions');;
+
 });
