@@ -52,8 +52,6 @@ Route::group(['prefix' => 'users', 'as' => 'user.','middleware'=>'auth:sanctum']
 });
 Route::group(['prefix' => 'bank','middleware'=>'auth:sanctum'], function () {
     Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');
-    Route::post('update_Bank_account/{id}', [BankAccountController::class, 'update_Bank_account'])->name('update_Bank_account');
-
 });
 Route::group(['prefix' => 'loan','middleware'=>'auth:sanctum'], function () {
     Route::post('add_loan/{count}', [LoanController::class, 'add_loan'])->name('add_loan');

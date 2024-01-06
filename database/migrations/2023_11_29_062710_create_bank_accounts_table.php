@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('bank_accounts', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id');
             $table->string('sheba_number')->unique();
             $table->string('kart_number');
             $table->string('bank_account_number')->unique();

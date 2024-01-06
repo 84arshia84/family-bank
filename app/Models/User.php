@@ -31,7 +31,8 @@ class User extends Authenticatable implements HasMedia, Wallet
         "father_name",
         "phone_number",
         "national_id",
-        "password"
+        "password",
+        "status"
     ];
 
     /**
