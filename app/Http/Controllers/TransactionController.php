@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Installment;
 use App\Models\Transaction;
 use App\Models\User;
+use Auth;
 use Evryn\LaravelToman\CallbackRequest;
 use Evryn\LaravelToman\Facades\Toman;
-use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 
@@ -46,23 +45,19 @@ class TransactionController extends Controller
         }
     }
 
-    // تابعی برای بررسی نتیجه پرداخت با استفاده از درخواست بازگشت
-    public function callback(CallbackRequest $request)
+    public function callback(CallbackRequest $request, $type = 'installment')
     {
         // یافتن تراکنش مربوطه از جدول تراکنش‌ها با استفاده از شناسه تراکنش
         $transaction = Transaction::where('gateway_result->transactionId', $request->transactionId())->first();
-        // یافتن قسط مربوطه از جدول نصب
-        $installment = Installment::find($transaction->installment_id);
 
-        // به‌روزرسانی وضعیت قسط به موفق
-        $installment->update(['Payment_status' => 'Paid']);
-        // تایید پرداخت با استفاده از تومان
         $payment = $request
-            ->amount($installment->cost) // تصحیح متغیر cost
+            ->amount($transaction->Price) // تصحیح متغیر cost
             ->verify();
 
         // اگر پرداخت موفق بود
         if ($payment->successful()) {
+
+            // تایید پرداخت با استفاده از تومان
 
             // گرفتن شناسه ارجاع از پرداخت
             $referenceId = $payment->referenceId();
@@ -72,40 +67,77 @@ class TransactionController extends Controller
                 'gateway_result->reference_id' => $referenceId,
                 'status' => 'success',
             ])->save();
-
-            // برگرداندن شناسه ارجاع، قسط و تراکنش به عنوان پاسخ
-            return response()->json([
+            $data = [
                 'reference_id' => $referenceId,
-                'installment' => $installment,
                 'transaction' => $transaction
-            ]);
+            ];
+            if ($type === 'installment') {        // یافتن قسط مربوطه از جدول نصب
+                $installment = Installment::find($transaction->installment_id);
 
-        }
+                // به‌روزرسانی وضعیت قسط به موفق
+                $installment->update(['Payment_status' => 'Paid']);
+                $data['installment'] = $installment;
+            }
+            // برگرداندن شناسه ارجاع، قسط و تراکنش به عنوان پاسخ
+            return response()->json($data);
 
-        // اگر پرداخت ناموفق بود
-        if ($payment->failed()) {
+        } // اگر پرداخت ناموفق بود
+        elseif ($payment->failed()) {
             // به‌روزرسانی تراکنش با پیام‌های خطا و وضعیت ناموفق
             $transaction->forceFill([
                 'gateway_result->messages' => $payment->messages(),
                 'status' => 'failed',
             ])->save();
             // به‌روزرسانی وضعیت قسط به ناموفق
-            $installment->update(['status' => 'failed']); // تغییر به وضعیت failed
-            // برگرداندن تراکنش به عنوان پاسخ
+            if ($type === 'installment') {
+                $installment = Installment::find($transaction->installment_id);
+                $installment->update(['status' => 'failed']); // تغییر به وضعیت failed
+            }            // برگرداندن تراکنش به عنوان پاسخ
             return response()->json(['transaction' => $transaction]);
-        }
-        if ($payment->alreadyVerified()) {
+        } else {
             // به‌روزرسانی تراکنش با پیام‌های خطا و وضعیت ناموفق
             $transaction->forceFill([
                 'gateway_result->messages' => $payment->messages(),
                 'status' => 'success',
             ])->save();
             // به‌روزرسانی وضعیت قسط به ناموفق
-            $installment->update(['status' => 'success']); // تغییر به وضعیت success
-            // برگرداندن تراکنش به عنوان پاسخ
+            if ($type === 'installment') {
+                $installment = Installment::find($transaction->installment_id);
+                $installment->update(['status' => 'failed']); // تغییر به وضعیت failed
+            }            // برگرداندن تراکنش به عنوان پاسخ
             return response()->json(['transaction' => $transaction]);
         }
     }
+
+    // تابعی برای بررسی نتیجه پرداخت با استفاده از درخواست بازگشت
+
+    public function paySubscription()
+    {
+        $totalPrice = 300000;
+
+        $request = Toman::amount($totalPrice)
+            ->description('پرداخت قسط در صندوق قرض‌الحسنه') // تغییر متن توضیحات
+            ->callback(route('payment.callback.subscription', ['type' => 'subscription']))
+            ->request();
+        if ($request->successful()) {
+            // ایجاد یک تراکنش جدید با اطلاعات مربوطه
+//            dd($totalPrice);
+            Transaction::create([
+                'user_id' => Auth::id(),
+                'gateway_result' => ['transactionId' => $request->transactionId()],
+                'Price' => $totalPrice,
+                'status' => 'pending',
+                'type' => 'subscription'
+            ]);
+            // برگرداندن آدرس پرداخت به عنوان پاسخ
+            return response()->json(['paymentUrl' => $request->paymentUrl()]);
+        } else {
+            // برگرداندن پیام‌های خطا به عنوان پاسخ
+            return $request->messages();
+        }
+
+    }
+
     public function showUserTransactions($userId)
     {
         // یافتن کاربر

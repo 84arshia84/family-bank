@@ -57,7 +57,9 @@ class UserController extends Controller
         ]);
     }
     public function update_status(Request $request)
-    {}
+    {
+
+    }
 //    public function user_image(Request $request,$user_id)
 //    {
 //        $user=User::findOrFail($user_id);

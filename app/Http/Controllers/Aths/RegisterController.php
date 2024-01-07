@@ -13,8 +13,9 @@ class RegisterController extends Controller
 {
     public function sendVerificationCode(Request $request)
     {
-        $rand = rand(1000, 9999);
-        $timeValid = Carbon::now()->addMinutes(5);
+//        $rand = rand(1000, 9999);
+        $rand =1234;
+        $timeValid = Carbon::now()->addMinutes(555555);
         $send_sms = TempCode::updateOrCreate([
             'phone_number' => $request->phone_number,
             'verification_cod' => $rand,

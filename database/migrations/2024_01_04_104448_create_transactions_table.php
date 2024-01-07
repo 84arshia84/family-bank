@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -14,11 +13,12 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->string('Price');
-            $table->json('gateway_result');
-            $table->bigInteger('loan_id');
-            $table->bigInteger('installment_id');
-            $table->enum('status' , ['Pending','success','failed']);
+                $table->string('Price');
+            $table->json('gateway_result')->nullable();
+            $table->bigInteger('loan_id')->nullable();
+            $table->bigInteger('installment_id')->nullable();
+            $table->enum('status', ['Pending', 'success', 'failed']);
+            $table->enum('type', ['subscription', 'installment'])->default('installment');
             $table->timestamps();
         });
     }

@@ -16,9 +16,10 @@ class Transaction extends Model
         "gateway_result",
         "loan_id",
         "installment_id",
+        "type"
     ];
     protected $casts = [
-        'gateway_result' => 'json'
+        'gateway_result' => 'object'
     ];
 
     public function loans(): HasMany
