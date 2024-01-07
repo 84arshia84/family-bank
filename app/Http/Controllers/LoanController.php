@@ -104,28 +104,32 @@ class LoanController extends Controller
         return response()->json(['message' => 'Loan status updated successfully']);
     }
 
-    public function Loan_details(Request $request)
+    public function Loan_details($id)
     {
         $user = Auth::user();
-        $loans = $user->loans()->with('installments')->get();
+        $loan = $user->loans()->with('installments')->findOrFail($id);
 
-        $loanDetails = [];
+        $lastPaidInstallment = $loan->installments->where('Payment_status', 'Paid')->last();
+        $deferredInstallments = $loan->installments->where('status', 'Deferred_installments');
 
-        foreach ($loans as $loan) {
-            $installments = $loan->installments;
-
-            $lastPaidInstallment = $installments->where('Payment_status', 'Paid')->last();
-            $deferredInstallments = $installments->where('status', 'Deferred_installments');
-
-            $loanDetails[] = [
-                'loan_id' => $loan->id,
-                'loan_amount' => $loan->amount,
-                'last_paid_installment' => $lastPaidInstallment,
-                'deferred_installments' => $deferredInstallments,
-            ];
+        if ($lastPaidInstallment) {
+            $lastPaidInstallmentId = $lastPaidInstallment->id;
+        } else {
+            $lastPaidInstallmentId = null;
         }
 
-        return response()->json(['loan_details' => $loanDetails]);
+        if ($deferredInstallments->isEmpty()) {
+            $deferredInstallmentId = null;
+        } else {
+            $deferredInstallmentId = $deferredInstallments->first()->id;
+        }
+
+        return response()->json([
+            'loan_id' => $loan->id,
+            'loan_amount' => $loan->amount,
+            'last_paid_installment_id' => $lastPaidInstallmentId,
+            'deferred_installment_id' => $deferredInstallmentId,
+        ]);
     }
 
 
