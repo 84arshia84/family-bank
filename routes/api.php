@@ -60,6 +60,7 @@ Route::group(['prefix' => 'loan',], function () {
     Route::get('List_of_loans', [LoanController::class, 'List_of_loans'])->name('List_of_loans');
     Route::put('update_status/{id}', [LoanController::class, 'update_status'])->name('update_status');
     Route::post('date_of_loan/{id}', [LoanController::class, 'date_of_loan'])->name('date_of_loan');
+    Route::get('Loan_details', [LoanController::class, 'Loan_details'])->middleware('auth:sanctum')->name('Loan_details');
 
 });
 

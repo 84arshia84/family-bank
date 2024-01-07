@@ -27,6 +27,7 @@ class LoanController extends Controller
         return response()->json(['The loan application was registered  ' => $loan
         ]);
     }
+
     public function date_of_loan(Request $request, $id)
     {
         // Validate the request input
@@ -56,11 +57,13 @@ class LoanController extends Controller
 //
 
     }
+
     public function delete_loan($id)
     {
         $loan = Loan::find($id); // پیدا کردن یک کاربر با شناسه 1
         $loan->delete(); // حذف نرم کاربر
     }
+
     public function Returning_the_deleted_loan($id)
     {
         $loan = Loan::withTrashed()->find($id); // پیدا کردن یک کاربر با شناسه 1 حتی اگر حذف شده باشد
@@ -99,6 +102,30 @@ class LoanController extends Controller
 
         // Return a success message or redirect to another page
         return response()->json(['message' => 'Loan status updated successfully']);
+    }
+
+    public function Loan_details(Request $request)
+    {
+        $user = Auth::user();
+        $loans = $user->loans()->with('installments')->get();
+
+        $loanDetails = [];
+
+        foreach ($loans as $loan) {
+            $installments = $loan->installments;
+
+            $lastPaidInstallment = $installments->where('Payment_status', 'Paid')->last();
+            $deferredInstallments = $installments->where('status', 'Deferred_installments');
+
+            $loanDetails[] = [
+                'loan_id' => $loan->id,
+                'loan_amount' => $loan->amount,
+                'last_paid_installment' => $lastPaidInstallment,
+                'deferred_installments' => $deferredInstallments,
+            ];
+        }
+
+        return response()->json(['loan_details' => $loanDetails]);
     }
 
 
