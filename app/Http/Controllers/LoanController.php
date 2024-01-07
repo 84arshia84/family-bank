@@ -128,6 +128,7 @@ class LoanController extends Controller
             'loan_id' => $loan->id,
             'loan_amount' => $loan->amount,
             'last_paid_installment_id' => $lastPaidInstallmentId,
+            'last_paid_installment_cost' => $lastPaidInstallment ? $lastPaidInstallment->cost : null,
             'deferred_installment_id' => $deferredInstallmentId,
         ]);
     }
