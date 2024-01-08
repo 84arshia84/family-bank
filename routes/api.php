@@ -42,13 +42,15 @@ Route::prefix('Auth')->group(function () {
 
 
 });
-Route::group(['prefix' => 'users', 'as' => 'user.', 'middleware' => 'auth:sanctum'], function () {
+Route::group(['prefix' => 'user'], function () {
     Route::post('add_user', [UserController::class, 'add_user'])->name('add');
     Route::get('all_users', [UserController::class, 'all_users'])->name('all');
     Route::post('find_user', [UserController::class, 'find_user'])->name('find');
     Route::put('update_user/{id}', [UserController::class, 'update_user'])->name('update');
     Route::post('user_image/{id}', [UserController::class, 'user_image'])->name('image');
     Route::get('find_user/{id}', [UserController::class, 'find_user'])->name('find');
+    Route::post('update_status/{id}', [UserController::class, 'update_status'])->name('update_status');
+    Route::get('show_user_info', [UserController::class, 'show_user_info'])->middleware('auth:sanctum')->name('show_user_info');
 });
 Route::group(['prefix' => 'bank', 'middleware' => 'auth:sanctum'], function () {
     Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');

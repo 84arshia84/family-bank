@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -24,6 +24,7 @@ class UserController extends Controller
             'add_user' => $user
         ]);
     }
+
     public function all_users()
     {
         $users = User::all();
@@ -32,7 +33,7 @@ class UserController extends Controller
         ]);
     }
 
-        public function find_user(Request $request)
+    public function find_user(Request $request)
     {
         $user = User::find($request->id);
         return response()->json([
@@ -45,8 +46,7 @@ class UserController extends Controller
     public function update_user(Request $request, $id)
     {
         $user = User::find($id);
-        if ($request->hasFile('img'))
-        {
+        if ($request->hasFile('img')) {
             $user->addMediaFromRequest('img')->toMediaCollection('add_avatar_for_user');
             $user->load('media');
         }
@@ -56,76 +56,39 @@ class UserController extends Controller
             'update_user'
         ]);
     }
-    public function update_status(Request $request)
+
+
+    public function update_status(Request $request, $id)
     {
+        // Validate the request input
+        $request->validate([
+            'status' => 'required'
+        ]);
+        // Find the order by id
+        $user = User::findOrFail($id);
 
+        // Update the status field
+        $user->status = $request->status;
+        $user->save();
+
+        // Return a success message or redirect to another page
+        return response()->json(['message' => 'user status updated successfully']);
     }
-//    public function user_image(Request $request,$user_id)
-//    {
-//        $user=User::findOrFail($user_id);
-//        $img = $user->addMedia($request->image)->toMediaCollection('user'.$user_id);
-//        return $img;
-//    }
-//
 
+    public function show_user_info()
+    {
+        $user=Auth::user();
+
+        // اطلاعات مورد نیاز کاربر
+        $userDetails = [
+            'name' => $user->name,
+            'family' => $user->family,
+            'created_at' => $user->created_at,
+            'wallet_balance' => $user->balance, // اگر نام مدل کیف پول Wallet است، باید متناسب با آن تغییر کند
+            'status' => $user->status,
+        ];
+
+        return response()->json(['user_info' => $userDetails]);
+    }
 }
-
-//
-//namespace App\Http\Controllers\Aths;
-//
-//use App\Http\Controllers\Controller;
-//use App\Models\User;
-//use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Hash;
-//use Illuminate\Validation\ValidationException;
-//
-//class LoginController extends Controller
-//{
-//    /**
-//     * Handle the incoming request.
-//     */
-//    public function __invoke(Request $request)
-//    {
-//        $user = User::where('phone_number', $request->phone_number)->first();
-//        if (!$user || !Hash::check($request->password, $user->password)) {
-//            throw ValidationException::withMessages([
-//                'password is not true'
-//            ]);
-//        }
-//        $token = $user->createToken('api_token')->plainTextToken;
-//        return response()->json([
-//            'user' => $user,
-//            'token' => $token,
-//        ]);
-//    }
-//}
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//namespace App\Http\Controllers\Aths;
-//
-//use App\Http\Controllers\Controller;
-//use App\Models\User;
-//use Illuminate\Http\Request;
-//
-//class LogoutController extends Controller
-//{
-//    /**
-//     * Handle the incoming request.
-//     */
-//    public function __invoke(Request $request)
-//    {
-////        dd($request->user());
-//        $request->user()->currentAccessToken()->delete();
-//        return response()->json([
-//            'message' => 'Logged out.'
-//        ]);
-//    }
-//}
 
