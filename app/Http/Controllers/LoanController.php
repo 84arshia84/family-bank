@@ -121,7 +121,7 @@ class LoanController extends Controller
         if ($deferredInstallments->isEmpty()) {
             $deferredInstallmentId = null;
         } else {
-            $deferredInstallmentId = $deferredInstallments->first()->id;
+            $deferredInstallmentId = $deferredInstallments->first()->cost;
         }
 
         return response()->json([
