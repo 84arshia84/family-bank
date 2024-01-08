@@ -51,6 +51,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('find_user/{id}', [UserController::class, 'find_user'])->name('find');
     Route::post('update_status/{id}', [UserController::class, 'update_status'])->name('update_status');
     Route::get('show_user_info', [UserController::class, 'show_user_info'])->middleware('auth:sanctum')->name('show_user_info');
+    Route::post('change_password', [UserController::class, 'change_password'])->middleware('auth:sanctum')->name('change_password');
 });
 Route::group(['prefix' => 'bank', 'middleware' => 'auth:sanctum'], function () {
     Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add_Bank_account');

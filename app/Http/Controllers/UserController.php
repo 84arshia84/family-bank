@@ -90,5 +90,27 @@ class UserController extends Controller
 
         return response()->json(['user_info' => $userDetails]);
     }
+    public function change_password(Request $request)
+    {
+        $user = Auth::user();
+
+        // Validate request input
+        $request->validate([
+            'current_password' => 'required|string|min:6',
+            'new_password' => 'required|string|min:6|confirmed',
+        ]);
+
+        // Check if the entered current password matches the user's actual password
+        if (!password_verify($request->current_password, $user->password)) {
+            return response()->json(['error' => 'Current password is incorrect'], 401);
+        }
+
+        // Update user's password with the new one
+        $user->password = bcrypt($request->new_password);
+        $user->save();
+
+        return response()->json(['message' => 'Password updated successfully']);
+    }
+
 }
 

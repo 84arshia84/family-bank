@@ -12,19 +12,23 @@ class LoginController extends Controller
 {
     public function login(Request $request)
     {
-        {
-            $user = User::where('phone_number', $request->phone_number)->first();
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                throw ValidationException::withMessages([
-                    'password is not true'
-                ]);
-            }
-            $token = $user->createToken('api_token')->plainTextToken;
-            return response()->json([
-                'user' => $user,
-                'token' => $token,
+        // بررسی وجود کاربر با شماره تلفن
+        $user = User::where('phone_number', $request->phone_number)->first();
+
+        // اگر کاربر وجود نداشت یا رمزعبور صحیح نبود
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'password' => ['رمزعبور صحیح نیست']
             ]);
         }
-    }
 
+        // ایجاد توکن برای کاربر
+        $token = $user->createToken('api_token')->plainTextToken;
+
+        // برگرداندن پاسخ به کلاینت
+        return response()->json([
+            'user' => $user->only(['id', 'name', 'phone_number']), // برگرداندن اطلاعات مهم کاربر
+            'token' => $token,
+        ]);
+    }
 }
