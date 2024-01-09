@@ -72,7 +72,6 @@ Route::group(['prefix' => 'installment'], function () {
     Route::get('find_installment/{id}', [InstallmentController::class, 'find_installment'])->name('find_installment');
     Route::get('all_installment/{user_id}', [InstallmentController::class, 'all_installment'])->name('all_installment');
     //Route::post('store', [InstallmentController::class, 'store'])->name('store');
-    Route::post('Bank_receipt_photo/{loan_id}', [InstallmentController::class, 'Bank_receipt_photo'])->name('Bank_receipt_photo');
 
 });
 Route::group(['prefix' => 'wallet'], function () {
@@ -92,5 +91,6 @@ Route::group(['prefix' => 'transaction'], function () {
     Route::post('pay/{id}', [TransactionController::class, 'pay'])->name('pay');;
     Route::get('showUserTransactions/{userId}', [TransactionController::class, 'showUserTransactions'])->name('showUserTransactions');;
     Route::post('paySubscription', [TransactionController::class, 'paySubscription'])->middleware('auth:sanctum')->name('paySubscription');;
+    Route::post('Bank_receipt_photo', [TransactionController::class, 'Bank_receipt_photo'])->middleware('auth:sanctum')->name('Bank_receipt_photo');
 
 });

@@ -13,13 +13,18 @@ return new class extends Migration {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-                $table->string('Price');
+            $table->string('Price');
             $table->json('gateway_result')->nullable();
             $table->bigInteger('loan_id')->nullable();
             $table->bigInteger('installment_id')->nullable();
             $table->enum('status', ['Pending', 'success', 'failed']);
             $table->enum('type', ['subscription', 'installment'])->default('installment');
             $table->timestamps();
+
+            // اضافه کردن فیلدهای جدید
+            $table->string('date')->nullable(); // تاریخ
+            $table->string('tracking_code')->nullable(); // کد پیگیری
+            $table->text('description')->nullable(); // توضیحات
         });
     }
 

@@ -8,6 +8,7 @@ use App\Models\User;
 use Auth;
 use Evryn\LaravelToman\CallbackRequest;
 use Evryn\LaravelToman\Facades\Toman;
+use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 
@@ -153,6 +154,34 @@ class TransactionController extends Controller
         }
         // اگر کاربر پیدا نشد
         return "کاربر مورد نظر یافت نشد.";
+    }
+
+    public function Bank_receipt_photo(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,png|max:10240',
+            'price' => 'required|numeric',
+            'date' => 'required|date',
+            'tracking_code' => 'required|string',
+            'description' => 'nullable|string',
+
+        ]);
+
+        $user = Auth::user();
+
+
+        $transaction = Transaction::create([
+            'user_id' => $user->id,
+            'Price' => $request->price,
+            'date' => $request->date,
+            'tracking_code' => $request->tracking_code,
+            'description' => $request->description,
+            'status' => 'Pending'
+            // سایر فیلدهای مورد نیاز برای تراکنش را نیز اضافه کنید
+        ]);
+        $img = $transaction->addMedia($request->image)->toMediaCollection('Bank_receipt_photo');
+        return $transaction->load('media');
+
     }
 
 }
