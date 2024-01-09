@@ -62,7 +62,7 @@ class RegisterController extends Controller
             $user->load('media');
         }
         // اینجا باید کاربر را با حذف فیلد‌های شماره تلفن و ایمیل برگردانید
-        return response()->json(['user' => $user->makeHidden(['phone_number', 'email']) // اضافه کردن makeHidden
+        return response()->json(['user' => $user->makeHidden(['phone_number', 'email'])->toArray() // اضافه کردن makeHidden
         ]);
 
     }
@@ -106,10 +106,11 @@ class RegisterController extends Controller
         $status = TempCode::where('phone_number', $request->phone_number)->where('verification_cod', $request->verification_cod)->first();
         {
             if ($status != null) {
-                return response()->json('کد تایید شد');
+                response()->json(['message' => 'کد تایید شد']);
             } else {
-                return response()->json('کد اشتباه است');
+                response()->json(['message' => 'کد اشتباه است']);
             }
         }
     }
+
 }

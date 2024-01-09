@@ -111,6 +111,22 @@ class UserController extends Controller
 
         return response()->json(['message' => 'Password updated successfully']);
     }
+    public function Email_update_for_user(Request $request)
+    {
+        $user = Auth::user(); // یافتن کاربر فعلی
+
+        // Validate request input and check if the email is unique in the users table except the current user id
+        $request->validate([ // اعتبارسنجی درخواست و بررسی اینکه ایمیل در جدول کاربران به جز شناسه کاربر فعلی یکتا باشد
+            'email' => 'required|string|email|max:255|unique:users', // اضافه کردن unique:users
+        ]);
+
+        // Update user's password with the new one
+        $user->email = $request->email; // به‌روزرسانی ایمیل کاربر
+        $user->save(); // ذخیره کاربر
+
+        return response()->json(['message' => 'Email updated successfully']); // برگرداندن پیام موفقیت‌آمیز
+    }
+
 
 }
 
