@@ -89,14 +89,6 @@ class RegisterController extends Controller
 
     public function register(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'family' => 'required|string|max:255',
-            'father_name' => 'required|string|max:255',
-            'phone_number' => 'required|string|max:11|unique:users',
-            'national_id' => 'required',
-            'password' => 'required|string|min:6',
-        ]);
 
         $user = User::with('media')->find($id);
         $user->update($request->all());
@@ -111,7 +103,6 @@ class RegisterController extends Controller
     {
         $Code_confirmation_time = Carbon::now();
 
-
         $status = TempCode::where('phone_number', $request->phone_number)->where('verification_cod', $request->verification_cod)->first();
         {
             if ($status != null) {
@@ -120,6 +111,5 @@ class RegisterController extends Controller
                 return response()->json('کد اشتباه است');
             }
         }
-
     }
 }

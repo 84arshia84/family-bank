@@ -143,14 +143,4 @@ class LoanController extends Controller
         ]);
     }
 
-    public function index()
-    {
-        $user = Auth::user();
-        $loans = $user->loans()->with('installments')->get([]);
-        return response()->json([
-            'loans' => $loans
-        ]);
-    }
-
-
 }
