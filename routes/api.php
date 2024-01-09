@@ -24,11 +24,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/link', function () {
-    $target = '/home/familybank/domains/familybank.v1r.ir/core/storage/app/public';
-    $shortcut = '/home/familybank/domains/familybank.v1r.ir/public_html/storage';
-    symlink($target, $shortcut);
-});
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
