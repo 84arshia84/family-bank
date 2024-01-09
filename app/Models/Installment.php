@@ -25,5 +25,6 @@ class Installment extends Model implements HasMedia
         return $this->belongsTo(Loan::class);
     }
 
+
 }
 

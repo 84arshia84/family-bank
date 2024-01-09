@@ -89,16 +89,15 @@ class RegisterController extends Controller
 
     public function register(Request $request, $id)
     {
-//        $request->validate([
-//            'name' => 'required|string|max:255',
-//            'family' => 'required|string|max:255',
-//            'father_name' => 'required|string|max:255',
-//            'phone_number' => 'required|string|max:11|unique:users',
-//            'national_id' => 'required',
-//            'password' => 'required|string|min:6',
-//        ]);
-//        $user = User::update($request->all());
-//        $user = User::update($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'family' => 'required|string|max:255',
+            'father_name' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:11|unique:users',
+            'national_id' => 'required',
+            'password' => 'required|string|min:6',
+        ]);
+
         $user = User::with('media')->find($id);
         $user->update($request->all());
         $user->save();

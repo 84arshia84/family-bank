@@ -183,5 +183,16 @@ class TransactionController extends Controller
         return $transaction->load('media');
 
     }
+    public function showUserPaidInstallments($userId)
+    {
+        $user = User::find($userId);
+
+        if ($user) {
+            $paidInstallments = $user->installments()->where('status', 'Installments_paid')->get();
+            return response()->json(['paid_installments' => $paidInstallments]);
+        }
+
+        return "کاربر مورد نظر یافت نشد.";
+    }
 
 }

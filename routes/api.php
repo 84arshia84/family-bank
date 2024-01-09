@@ -66,7 +66,7 @@ Route::group(['prefix' => 'loan',], function () {
     Route::get('List_of_loans', [LoanController::class, 'List_of_loans'])->name('List_of_loans');
     Route::put('update_status/{id}', [LoanController::class, 'update_status'])->name('update_status');
     Route::post('date_of_loan/{id}', [LoanController::class, 'date_of_loan'])->name('date_of_loan');
-    Route::get('Loan_details/{id}', [LoanController::class, 'Loan_details'])->middleware('auth:sanctum')->name('Loan_details');
+    Route::get('Loan_details/{loan}', [LoanController::class, 'Loan_details'])->middleware('auth:sanctum')->name('Loan_details');
 
 });
 
@@ -95,5 +95,6 @@ Route::group(['prefix' => 'transaction'], function () {
     Route::get('showUserTransactions/{userId}', [TransactionController::class, 'showUserTransactions'])->name('showUserTransactions');;
     Route::post('paySubscription', [TransactionController::class, 'paySubscription'])->middleware('auth:sanctum')->name('paySubscription');;
     Route::post('Bank_receipt_photo', [TransactionController::class, 'Bank_receipt_photo'])->middleware('auth:sanctum')->name('Bank_receipt_photo');
+    Route::get('showUserPaidInstallments/{userId}', [TransactionController::class, 'showUserPaidInstallments'])->name('showUserPaidInstallments');
 
 });

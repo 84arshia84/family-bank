@@ -118,9 +118,9 @@ class LoanController extends Controller
             $lastPaidInstallmentId = null;
         }
 
-        if ($deferredInstallments->isEmpty()) {
+        if ($deferredInstallments->isEmpty()) { // اگر اقساط معوقه وجود نداشت
             $deferredInstallmentId = null;
-        } else {
+        } else {   // اگر اقساط معوقه وجود داشت
             $deferredInstallmentId = $deferredInstallments->first()->cost;
         }
 
@@ -130,6 +130,25 @@ class LoanController extends Controller
             'last_paid_installment_id' => $lastPaidInstallmentId,
             'last_paid_installment_cost' => $lastPaidInstallment ? $lastPaidInstallment->cost : null,
             'deferred_installment_id' => $deferredInstallmentId,
+        ]);
+    }
+
+    public function update_loan(Request $request, $id)
+    {
+        $loan = Loan::find($id);
+        $loan->update($request->all());
+        return response()->json([
+            'message' => 'Loan updated successfully',
+            'loan' => $loan
+        ]);
+    }
+
+    public function index()
+    {
+        $user = Auth::user();
+        $loans = $user->loans()->with('installments')->get([]);
+        return response()->json([
+            'loans' => $loans
         ]);
     }
 
