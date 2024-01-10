@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+{
 class UserController extends Controller
 {
     public function add_user(Request $request)
@@ -127,6 +129,25 @@ class UserController extends Controller
         return response()->json(['message' => 'Email updated successfully']); // برگرداندن پیام موفقیت‌آمیز
     }
 
+
+        public function profile_for_user(Request $request)
+        {
+            $user = Auth::user();
+
+            // Validate request input and check if the profile image is valid
+            $request->validate([
+                'profile' => 'required|image|mimes:jpg,png|max:10240',
+            ]);
+
+            // Delete existing profile image
+            $user->clearMediaCollection('profile');
+
+            // Store the new profile image
+            $user->addMediaFromRequest('profile')->toMediaCollection('profile');
+
+            return response()->json([$user->getMedia('profile')]);
+        }
+    }
 
 }
 
