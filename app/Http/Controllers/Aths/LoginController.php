@@ -31,4 +31,17 @@ class LoginController extends Controller
             'token' => $token,
         ]);
     }
+    public function logout(Request $request)
+    {
+        // یافتن کاربر با استفاده از توکن
+        $user = $request->user();
+
+        // حذف توکن کاربر
+        $user->tokens()->delete();
+
+        // برگرداندن پاسخ به کلاینت
+        return response()->json([
+            'message' => 'با موفقیت خارج شدید'
+        ]);
+    }
 }

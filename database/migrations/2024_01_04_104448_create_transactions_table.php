@@ -20,10 +20,6 @@ return new class extends Migration {
             $table->enum('status', ['Pending', 'success', 'failed']);
             $table->enum('type', ['subscription', 'installment'])->default('installment');
             $table->timestamps();
-
-            // اضافه کردن فیلدهای جدید
-            $table->string('date')->nullable(); // تاریخ
-            $table->string('tracking_code')->nullable(); // کد پیگیری
             $table->text('description')->nullable(); // توضیحات
         });
     }

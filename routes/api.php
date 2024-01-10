@@ -97,5 +97,6 @@ Route::group(['prefix' => 'transaction'], function () {
     Route::post('paySubscription', [TransactionController::class, 'paySubscription'])->middleware('auth:sanctum')->name('paySubscription');;
     Route::post('Bank_receipt_photo', [TransactionController::class, 'Bank_receipt_photo'])->middleware('auth:sanctum')->name('Bank_receipt_photo');
     Route::get('showUserPaidInstallments/{userId}', [TransactionController::class, 'showUserPaidInstallments'])->name('showUserPaidInstallments');
+    Route::get('show/{id}', [TransactionController::class, 'show'])->middleware('auth:sanctum')->name('show');
 
 });

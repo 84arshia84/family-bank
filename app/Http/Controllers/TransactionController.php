@@ -67,6 +67,7 @@ class TransactionController extends Controller
             $transaction->forceFill([
                 'gateway_result->reference_id' => $referenceId,
                 'status' => 'success',
+                'description' => 'پرداخت موفق',
             ])->save();
             $data = [
                 'reference_id' => $referenceId,
@@ -179,20 +180,82 @@ class TransactionController extends Controller
             'status' => 'Pending'
             // سایر فیلدهای مورد نیاز برای تراکنش را نیز اضافه کنید
         ]);
-        $img = $transaction->addMedia($request->image)->toMediaCollection('Bank_receipt_photo');
-        return $transaction->load('media');
+        $img = $transaction->addMedia($request->image)->toMediaCollection('Bank_receipt_photo'); // اضافه کردن تصویر به تراکنش
+        return $transaction->load('media');  // ارسال تراکنش به عنوان پاسخ
 
     }
-    public function showUserPaidInstallments($userId)
-    {
-        $user = User::find($userId);
 
-        if ($user) {
-            $paidInstallments = $user->installments()->where('status', 'Installments_paid')->get();
-            return response()->json(['paid_installments' => $paidInstallments]);
+    public function showUserPaidInstallments($userId) // نمایش قسط‌های پرداخت شده
+    {
+        $user = User::find($userId); // یافتن کاربر
+
+        if ($user) { // اگر کاربر پیدا شد
+            $paidInstallments = $user->installments()->where('status', 'Installments_paid')->get(); // گرفتن قسط‌های پرداخت شده
+            return response()->json(['paid_installments' => $paidInstallments]); // ارسال قسط‌های پرداخت شده به نمایش
         }
 
         return "کاربر مورد نظر یافت نشد.";
     }
 
+    public function show($id)
+    {
+        // احراز هویت کاربر
+        $user = Auth::user();
+
+        // یافتن تراکنش مربوطه از جدول تراکنش‌ها
+        $transaction = Transaction::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+
+        // بررسی می‌کنیم که آیا تراکنش یافت شده است یا خیر
+        if ($transaction) {
+            // اطلاعات تراکنش را به صورت JSON برگردانیم
+            return response()->json([
+                'transaction_id' => $transaction->id,
+                'transaction_date' => $transaction->created_at,
+                'tracking_code' => $transaction->gateway_result->reference_id,
+                'amount' => $transaction->Price,
+                'description' => $transaction->description,
+                'user_id' => $transaction->user_id,
+            ]);
+        } else {
+            // در صورت عدم یافت تراکنش یا عدم احراز هویت، پیام خطا را برگردانیم
+            return response()->json(['error' => 'Transaction not found'], 404);
+        }
+    }
+
+    public function index()
+    {
+        // احراز هویت کاربر
+        $user = Auth::user();
+
+        // یافتن تمامی تراکنش‌های کاربر از جدول تراکنش‌ها
+        $transactions = Transaction::where('user_id', $user->id)->get();
+
+        // برگرداندن تمامی تراکنش‌ها به صورت JSON
+        return response()->json($transactions);
+    }
+
+    public function store(Request $request)
+    {
+        // احراز هویت کاربر
+        $user = Auth::user();
+
+        // اعتبارسنجی اطلاعات ورودی
+        $request->validate([    // اضافه کردن مقادیر مورد نیاز برای تراکنش
+            'amount' => 'required|numeric', // اضافه کردن مقدار مورد نیاز برای تراکنش
+            'description' => 'nullable|string', // اضافه کردن مقدار مورد نیاز برای تراکنش
+        ]);
+
+        // ایجاد یک تراکنش جدید با اطلاعات مربوطه
+        $transaction = Transaction::create([    // اضافه کردن مقادیر مورد نیاز برای تراکنش
+            'user_id' => $user->id, // اضافه کردن مقدار مورد نیاز برای تراکنش
+            'amount' => $request->amount,   // اضافه کردن مقدار مورد نیاز برای تراکنش
+            'description' => $request->description,
+            // سایر فیلدهای مورد نیاز برای تراکنش را نیز اضافه کنید
+        ]);
+
+        // ارسال تراکنش به عنوان پاسخ
+        return response()->json($transaction);
+    }
 }
