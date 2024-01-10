@@ -20,8 +20,6 @@ return new class extends Migration
             $table->string('phone_number')->unique()->nullable();
             $table->string('national_id')->unique();
             $table->string('password')->nullable();
-            $table->string('img')->nullable();
-            $table->string('profile')->nullable();
             $table->enum('status',['active','not_active'])->default('active');
 
             $table->rememberToken();

@@ -14,56 +14,53 @@ class RegisterController extends Controller
     public function sendVerificationCode(Request $request)
     {
 //        $rand = rand(1000, 9999);
-        $rand =1234;
+        $request->validate([
+            'phone_number' => 'required|regex:/(09)[0-9]{9}/|unique:users',
+        ]);
+        $rand = 1234;
         $timeValid = Carbon::now()->addMinutes(555555);
         $send_sms = TempCode::updateOrCreate([
             'phone_number' => $request->phone_number,
             'verification_cod' => $rand,
             'exp_time' => $timeValid,
         ]);
-        $this->send_sms($request, $rand);
+        $this->send_sms($request->phone_number, $rand);
         // اینجا باید متغیر 'phone_number' را به عنوان یک آرایه برگردانید
         return response()->json(['phone_number' => $request->phone_number]);    // Change text
     }
 
-    protected function send_sms(Request $request, $rand)
+    protected function send_sms($phone_number, $rand)
     {
         $client = new Client(env('IP_PANEL_KEY'));
         $patternValues = [
             "rand" => $rand
         ];
-
-        // اینجا باید مقدار 'qk9hlr3czoqct8t' را با کد الگوی پیامک خود جایگزین کنید
         $messageId = $client->sendPattern(
             "qk9hlr3czoqct8t", // باید کد الگوی پیامک خود را وارد کنید
             "+983000505",      // originator
-            $request->phone_number,  // recipient
+            $phone_number,  // recipient
             $patternValues  // pattern values
         );
     }
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'family' => 'required|string|max:255',
             'father_name' => 'required|string|max:255',
-            'national_id' => 'required',
-            'password' => '',
+            'national_id' => 'required|string|max:255|unique:users',
             'img' => 'required|image|mimes:jpg,png|max:10240',
+            'phone_number' => 'required|string|unique:users',
+            'password' => 'required|string|min:6',
         ]);
         // اینجا باید پرانتز بسته را از انتهای خط حذف کنید
-        $user = User::create($request->merge([
-            "password" => null
-        ])->except(['phone_number', 'email'])); // حذف پرانتز بسته
-        if ($request->hasFile('img'))
-        {
-            $user->addMediaFromRequest('img')->toMediaCollection('national_card_email');
-            $user->load('media');
+        $user = User::create($data);
+        if ($request->hasFile('img')) {
+            $user->addMediaFromRequest('img')->toMediaCollection('national_card_imag');
         }
         // اینجا باید کاربر را با حذف فیلد‌های شماره تلفن و ایمیل برگردانید
-        return response()->json(['user' => $user->makeHidden(['phone_number', 'email'])->toArray() // اضافه کردن makeHidden
-        ]);
+        return response()->json(['user' => $user, 'token' => $user->createToken('auth_token')->plainTextToken]);
 
     }
 
@@ -77,38 +74,18 @@ class RegisterController extends Controller
     }
 
 
-    public function Add_password(Request $request, $id)
-    {
-        $user = User::with('media')->find($id);
-        $user->update($request->all());
-        $user->save();
-        return response()->json([
-            $user
-        ]);
-    }
-
-    public function register(Request $request, $id)
-    {
-
-        $user = User::with('media')->find($id);
-        $user->update($request->all());
-        $user->save();
-        $token = $user->createToken('api_token')->plainTextToken;
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ]);
-    }
     public function check(Request $request)
     {
-        $Code_confirmation_time = Carbon::now();
-
-        $status = TempCode::where('phone_number', $request->phone_number)->where('verification_cod', $request->verification_cod)->first();
+        $request->validate([
+            'phone_number' => 'required|regex:/(09)[0-9]{9}/',
+            'verification_code' => 'required',
+        ]);
+        $status = TempCode::where('phone_number', $request->phone_number)->where('verification_cod', $request->verification_code)->exists();
         {
-            if ($status != null) {
-                response()->json(['message' => 'کد تایید شد']);
+            if ($status) {
+                return response()->json(['message' => 'کد تایید شد']);
             } else {
-                response()->json(['message' => 'کد اشتباه است']);
+                return response()->json(['message' => 'کد اشتباه است']);
             }
         }
     }
