@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,8 @@ return new class extends Migration {
             $table->bigInteger('installment_id')->nullable();
             $table->enum('status', ['Pending', 'success', 'failed']);
             $table->enum('type', ['subscription', 'installment'])->default('installment');
+            $table->date('date')->default( Carbon::now()  ); // تاریخ
+            $table->string('tracking_code')->nullable(); // کد پیگیری
             $table->timestamps();
             $table->text('description')->nullable(); // توضیحات
         });

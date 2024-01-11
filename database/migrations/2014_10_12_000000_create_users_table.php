@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('national_id')->unique();
             $table->string('password')->nullable();
             $table->enum('status',['active','not_active'])->default('active');
-
             $table->rememberToken();
             $table->timestamps();
         });
@@ -33,5 +32,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('users');
     }
+
 
 };

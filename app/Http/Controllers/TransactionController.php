@@ -151,12 +151,11 @@ class TransactionController extends Controller
             $transactions = $user->transactions()->latest()->get();
 
             // ارسال تراکنش‌ها به نمایش
-            return response()->json([$transactions]);
+            return response()->json($transactions);
         }
         // اگر کاربر پیدا نشد
-        return "کاربر مورد نظر یافت نشد.";
+        return response()->json(['message' => 'کاربر مورد نظر یافت نشد.'], 404);
     }
-
     public function Bank_receipt_photo(Request $request)
     {
         $request->validate([
@@ -184,6 +183,47 @@ class TransactionController extends Controller
         return $transaction->load('media');  // ارسال تراکنش به عنوان پاسخ
 
     }
+    public function update_status_Bank_receipt_photo    (Request $request, $id) //روت برای ادمین
+
+    {
+        $transaction = Transaction::find($id);
+        $transaction->update(['status' => $request->status]); // تغییر به وضعیت failed
+        return response()->json(['transaction' => $transaction]);
+    }
+    public function show_transactions_Bank_receipt_photo(Transaction $transaction) //روت برای ادمین
+    {
+        return response()->json(['transactions' => $transaction->load('media')]);
+    }
+    public function updateBankReceipt(Request $request, $id)
+    {
+        $request->validate([
+            'price' => 'required|numeric',
+            'date' => 'required|date',
+            'tracking_code' => 'required|string',
+            'description' => 'nullable|string',
+        ]);
+
+        // یافتن تراکنش با شناسه مورد نظر
+        $transaction = Transaction::find($id);
+
+        // بررسی آیا تراکنش یافت شده است یا خیر
+        if ($transaction) {
+            // به‌روزرسانی اطلاعات تراکنش به جز عکس رسید بانکی
+            $transaction->update([
+                'Price' => $request->price,
+                'date' => $request->date,
+                'tracking_code' => $request->tracking_code,
+                'description' => $request->description,
+                // سایر فیلدهای مورد نیاز برای تراکنش را نیز به‌روز کنید
+            ]);
+
+            // برگرداندن تراکنش به عنوان پاسخ
+            return response()->json($transaction);
+        }
+
+        // اگر تراکنش یافت نشد، پیام خطا را برگردانید
+        return response()->json(['error' => 'Transaction not found'], 404);
+    }
 
     public function showUserPaidInstallments($userId) // نمایش قسط‌های پرداخت شده
     {
@@ -196,6 +236,7 @@ class TransactionController extends Controller
 
         return "کاربر مورد نظر یافت نشد.";
     }
+
 
     public function show($id)
     {
@@ -257,5 +298,39 @@ class TransactionController extends Controller
 
         // ارسال تراکنش به عنوان پاسخ
         return response()->json($transaction);
+    }
+    public function getTransactionDetails(Request $request, $transactionId)
+    {
+        // Retrieve the user ID from the request
+        $userId = Auth::id();
+
+        // Retrieve the transaction details
+        $transaction = Transaction::where('id', $transactionId)
+            ->first();
+
+        // Check if the transaction exists
+        if ($transaction) {
+            // Retrieve the user details
+            $userDetails = $transaction->user->name . ' ' . $transaction->user->surname;
+
+            // Prepare the response data
+            $responseData = [
+                'user_details' => $userDetails,
+                'transaction_amount' => $transaction->Price,
+                'transaction_date' => $transaction->created_at,
+                'referenceId' => $transaction->gateway_result->reference_id,
+            ];
+
+            // Check if the bank receipt image exists
+            if ($transaction->bank_receipt_image) {
+                $responseData['bank_receipt_image'] = $transaction->bank_receipt_image;
+            }
+
+            // Return the response
+            return response()->json($responseData);
+        } else {
+            // Return an error response if the transaction doesn't exist
+            return response()->json(['error' => 'Transaction not found'], 404);
+        }
     }
 }

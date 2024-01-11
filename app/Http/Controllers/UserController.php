@@ -147,7 +147,22 @@ class UserController extends Controller
 
             return response()->json([$user->getMedia('profile')]);
         }
-    }
+        public function show_user_details(User $user)
+        {
+
+            // اطلاعات مورد نیاز کاربر
+            $userDetails = [
+                'name' => $user->name,
+                'father_name' => $user->father_name, // فیلد نام پدر
+                'phone_number' => $user->phone_number, // فیلد شماره تلفن
+                'national_id' => $user->national_id, // فیلد کد ملی
+                'created_at' => $user->created_at,
+                'wallet_balance' => $user->balance, // اگر نام مدل کیف پول Wallet است، باید متناسب با آن تغییر کند
+                'status' => $user->status,
+            ];
+
+            return response()->json(['user_info' => $userDetails]);
+        }
 
 }
-
+}

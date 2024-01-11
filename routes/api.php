@@ -52,10 +52,13 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('user_image/{id}', [UserController::class, 'user_image'])->name('image');
     Route::get('find_user/{id}', [UserController::class, 'find_user'])->name('find');
     Route::post('update_status/{id}', [UserController::class, 'update_status'])->name('update_status');
+
     Route::get('show_user_info', [UserController::class, 'show_user_info'])->middleware('auth:sanctum')->name('show_user_info');
     Route::post('change_password', [UserController::class, 'change_password'])->middleware('auth:sanctum')->name('change_password');
     Route::post('Email_update_for_user', [UserController::class, 'Email_update_for_user'])->middleware('auth:sanctum')->name('Email_update_for_user');
     Route::post('profile_for_user', [UserController::class, 'profile_for_user'])->middleware('auth:sanctum')->name('profile_for_user');
+
+    Route::get('show_user_details/{user}', [UserController::class, 'show_user_details'])->name('show_user_details');
 
 });
 Route::group(['prefix' => 'bank', 'middleware' => 'auth:sanctum'], function () {
@@ -91,13 +94,21 @@ Route::group(['prefix' => 'wallet'], function () {
 
 Route::group(['prefix' => 'transaction'], function () {
 
-    Route::get('/callback/', [TransactionController::class, 'callback'])->name('payment.callback');
-    Route::get('/callback/{type}', [TransactionController::class, 'callback'])->name('payment.callback.subscription');
+
     Route::post('pay/{id}', [TransactionController::class, 'pay'])->name('pay');;
     Route::get('showUserTransactions/{userId}', [TransactionController::class, 'showUserTransactions'])->name('showUserTransactions');;
     Route::post('paySubscription', [TransactionController::class, 'paySubscription'])->middleware('auth:sanctum')->name('paySubscription');;
-    Route::post('Bank_receipt_photo', [TransactionController::class, 'Bank_receipt_photo'])->middleware('auth:sanctum')->name('Bank_receipt_photo');
+
+    Route::get('/callback/', [TransactionController::class, 'callback'])->name('payment.callback');
+    Route::get('/callback/{type}', [TransactionController::class, 'callback'])->name('payment.callback.subscription');
+
     Route::get('showUserPaidInstallments/{userId}', [TransactionController::class, 'showUserPaidInstallments'])->name('showUserPaidInstallments');
     Route::get('show/{id}', [TransactionController::class, 'show'])->middleware('auth:sanctum')->name('show');
+
+    Route::post('Bank_receipt_photo', [TransactionController::class, 'Bank_receipt_photo'])->middleware('auth:sanctum')->name('Bank_receipt_photo');
+    Route::post('update_status_Bank_receipt_photo/{id}', [TransactionController::class, 'update_status_Bank_receipt_photo'])->name('update_status_Bank_receipt_photo');
+    Route::post('updateBankReceipt/{id}', [TransactionController::class, 'updateBankReceipt'])->name('updateBankReceipt');
+    Route::get('show_transactions_Bank_receipt_photo/{transaction}', [TransactionController::class, 'show_transactions_Bank_receipt_photo'])->name('show_transactions_Bank_receipt_photo');
+    Route::get('getTransactionDetails/{transactionId}', [TransactionController::class, 'getTransactionDetails'])->name('getTransactionDetails');
 
 });
