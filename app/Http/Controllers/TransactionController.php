@@ -156,6 +156,23 @@ class TransactionController extends Controller
         // اگر کاربر پیدا نشد
         return response()->json(['message' => 'کاربر مورد نظر یافت نشد.'], 404);
     }
+    public function showUserTransactionId()
+    {
+        // یافتن کاربر
+        $userId = auth()->id();
+
+        // اگر کاربر پیدا شد
+        if ($userId) {
+            // گرفتن تراکنش‌های کاربر
+            $transactions = Transaction::where('user_id', $userId)->latest()->get();
+
+            // ارسال تراکنش‌ها به نمایش
+            return response()->json($transactions);
+        }
+
+        // اگر کاربر پیدا نشد
+        return response()->json(['message' => 'کاربر مورد نظر یافت نشد.'], 404);
+    }
     public function Bank_receipt_photo(Request $request)
     {
         $request->validate([

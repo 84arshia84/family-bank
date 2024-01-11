@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Installment;
 use App\Models\Loan;
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class InstallmentController extends Controller
@@ -76,6 +77,18 @@ class InstallmentController extends Controller
             'data' => $installment
         ]);
 
+    }
+    public function Installments_paid()
+    {
+        // Authenticate the user
+        Auth::user();
+        $installments = Installment::where('status', 'Installments_paid')  // یافتن وام هایی که وضعیت پرداخت آن ها پرداخت شده است
+            ->get();
+
+        // Return the response
+        return response()->json([
+            'data' => $installments
+        ]);
     }
 
 

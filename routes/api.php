@@ -79,6 +79,7 @@ Route::group(['prefix' => 'installment'], function () {
 
     Route::get('find_installment/{id}', [InstallmentController::class, 'find_installment'])->name('find_installment');
     Route::get('all_installment/{user_id}', [InstallmentController::class, 'all_installment'])->name('all_installment');
+    Route::get('Installments_paid', [InstallmentController::class, 'Installments_paid'])->name('Installments_paid');
     //Route::post('store', [InstallmentController::class, 'store'])->name('store');
 
 });
@@ -97,6 +98,7 @@ Route::group(['prefix' => 'transaction'], function () {
 
     Route::post('pay/{id}', [TransactionController::class, 'pay'])->name('pay');;
     Route::get('showUserTransactions/{userId}', [TransactionController::class, 'showUserTransactions'])->name('showUserTransactions');;
+    Route::get('showUserTransactionId', [TransactionController::class, 'showUserTransactionId'])->name('showUserTransactionId');;
     Route::post('paySubscription', [TransactionController::class, 'paySubscription'])->middleware('auth:sanctum')->name('paySubscription');;
 
     Route::get('/callback/', [TransactionController::class, 'callback'])->name('payment.callback');
