@@ -12,9 +12,9 @@ class BankAccountController extends Controller
     {
         $user = Auth::user();
         $request->validate([
-            'sheba_number' => 'required|string|max:24',
-            'kart_number' => 'required|string|max:4',
-            'bank_account_number' => 'required|string|max:16'
+            'sheba_number' => 'required|string',
+            'kart_number' => 'required|string',
+            'bank_account_number' => 'required|string'
         ]);
 
         $BankAccount = BankAccount::updateOrCreate(

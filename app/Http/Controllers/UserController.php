@@ -10,6 +10,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 {
 class UserController extends Controller
 {
+
     public function add_user(Request $request)
     {
         $request->validate([
