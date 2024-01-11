@@ -12,7 +12,7 @@ class BankAccountController extends Controller
     {
         $user = Auth::user();
         $request->validate([
-            'sheba_number' => 'required|string',
+            'sheba_number' => 'required|string',//
             'kart_number' => 'required|string',
             'bank_account_number' => 'required|string'
         ]);
