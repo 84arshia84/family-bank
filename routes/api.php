@@ -69,9 +69,10 @@ Route::group(['prefix' => 'loan',], function () {
     Route::post('delete_loan/{id}', [LoanController::class, 'delete_loan'])->middleware('auth:sanctum')->name('delete_loan');
     Route::get('Returning_the_deleted_loan/{id}', [LoanController::class, 'Returning_the_deleted_loan'])->name('Returning_the_deleted_loan');
     Route::get('List_of_loans', [LoanController::class, 'List_of_loans'])->name('List_of_loans');
-    Route::put('update_status/{id}', [LoanController::class, 'update_status'])->name('update_status');
+    Route::put('update_status_loan/{id}', [LoanController::class, 'update_status_loan'])->name('update_status_loan ');
     Route::post('date_of_loan/{id}', [LoanController::class, 'date_of_loan'])->name('date_of_loan');
     Route::get('Loan_details/{loan}', [LoanController::class, 'Loan_details'])->middleware('auth:sanctum')->name('Loan_details');
+    Route::get('all_loans_for_user', [LoanController::class, 'all_loans_for_user'])->middleware('auth:sanctum')->name('all_loans_for_user');
 
 });
 
@@ -97,7 +98,7 @@ Route::group(['prefix' => 'transaction'], function () {
 
 
     Route::post('pay/{id}', [TransactionController::class, 'pay'])->name('pay');;
-    Route::get('showUserTransactions/{userId}', [TransactionController::class, 'showUserTransactions'])->name('showUserTransactions');;
+    Route::get('showUserTransactions', [TransactionController::class, 'showUserTransactions'])->name('showUserTransactions');;
     Route::get('showUserTransactionId', [TransactionController::class, 'showUserTransactionId'])->name('showUserTransactionId');;
     Route::post('paySubscription', [TransactionController::class, 'paySubscription'])->middleware('auth:sanctum')->name('paySubscription');;
 

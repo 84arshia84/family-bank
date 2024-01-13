@@ -24,7 +24,7 @@ class LoanController extends Controller
         $loan = Loan::create($data); // شرط برای یافتن یا ایجاد رکورد
 
 
-        return response()->json(['The loan application was registered  ' => $loan
+        return response()->json([$loan
         ]);
     }
 
@@ -73,21 +73,31 @@ class LoanController extends Controller
 
     public function List_of_loans()
     {
-        $loan = Loan::all();
-        return response()->json([
-            $loan
+        $loans = Loan::with('user')->get();
 
-        ]);
+        $loanData = [];
+        foreach ($loans as $loan) {
+            $loanData[] = [
+                'id' => $loan->id,
+                'title_of_loan' => $loan->title_of_loan,
+                'amount' => $loan->amount,
+                'description' => $loan->description,
+                'name' => $loan->user->name,
+                'family' => $loan->user->family,
+                'father_name' => $loan->user->father_name,
+                'national_id' => $loan->user->national_id,
+                'status' => $loan->user->status
+
+
+            ];
+        }
+
+        return response()->json($loanData);
     }
 
-    public function loan_check(Request $request, $id)
-    {
-        $load = Loan::find($id);
-        $load->update(['status' => $request->status]);
-    }
 
 
-    public function update_status(Request $request, $id)
+    public function update_status_loan(Request $request, $id)
     {
         // Validate the request input
         $request->validate([
@@ -141,6 +151,37 @@ class LoanController extends Controller
             'message' => 'Loan updated successfully',
             'loan' => $loan
         ]);
+    }
+    public function all_loans_for_user()
+    {
+        $user = Auth::user();
+        $loans = $user->loans()->with('installments')->get();
+
+        $loanData = [];
+        foreach ($loans as $loan) {
+            $loanData[] = [
+                'id' => $loan->id,
+                'title_of_loan' => $loan->title_of_loan,
+                'amount' => $loan->amount,
+                'description' => $loan->description,
+                'name' => $loan->user->name,
+                'family' => $loan->user->family,
+                'father_name' => $loan->user->father_name,
+                'national_id' => $loan->user->national_id,
+                'status' => $loan->user->status,
+                'installments' => $loan->installments->map(function ($installment) {
+                    return [
+                        'id' => $installment->id,
+                        'date_of_payment' => $installment->date_of_payment,
+                        'cost' => $installment->cost,
+                        'Payment_status' => $installment->Payment_status,
+                        'status' => $installment->status,
+                    ];
+                })
+            ];
+        }
+
+        return response()->json($loanData);
     }
 
 }

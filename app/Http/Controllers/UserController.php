@@ -164,6 +164,28 @@ class UserController extends Controller
 
             return response()->json(['user_info' => $userDetails]);
         }
+        public function user_image(Request $request, $id)
+        {
+            $user = User::find($id);
+            $img = $user->addMedia($request->image)->toMediaCollection('add_avatar_for_user');
+            return $img;
+        }
+        public function delete_user($id)
+        {
+            $user = User::find($id);
+            $user->delete();
+            return response()->json([
+                'delete_user'
+            ]);
+        }
+        public function Returning_the_deleted_user($id)
+        {
+            $user = User::withTrashed()->find($id);
+            $user->restore();
+            return response()->json([
+                'Returning_the_deleted_user'
+            ]);
+        }
 
 }
 }

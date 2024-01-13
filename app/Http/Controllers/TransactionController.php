@@ -140,10 +140,10 @@ class TransactionController extends Controller
 
     }
 
-    public function showUserTransactions($userId)
+    public function showUserTransactions()
     {
         // یافتن کاربر
-        $user = User::find($userId);
+        $user=Auth::user();
 
         // اگر کاربر پیدا شد
         if ($user) {
@@ -328,8 +328,7 @@ class TransactionController extends Controller
         // Check if the transaction exists
         if ($transaction) {
             // Retrieve the user details
-            $userDetails = $transaction->user->name . ' ' . $transaction->user->surname;
-
+            $userDetails = $transaction->user->name  . ' ' . $transaction->user->surname . ' ' . $transaction->user->family;
             // Prepare the response data
             $responseData = [
                 'user_details' => $userDetails,
