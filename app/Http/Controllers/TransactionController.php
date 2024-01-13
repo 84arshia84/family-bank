@@ -23,13 +23,12 @@ class TransactionController extends Controller
         // ایجاد درخواست پرداخت با استفاده از تومان
         $request = Toman::amount($totalPrice)
             ->description('پرداخت قسط در صندوق قرض‌الحسنه') // تغییر متن توضیحات
-            ->callback(route('payment.callback'))
+            ->callback(route('payment.callback', ['type' => 'installment', 'installment' => $id]))
             ->request();
 
         // اگر درخواست پرداخت موفق بود
         if ($request->successful()) {
             // ایجاد یک تراکنش جدید با اطلاعات مربوطه
-//            dd($totalPrice);
             $transaction = Transaction::create([
                 'user_id' => $installment->loan->user_id,
                 'installment_id' => $id,
@@ -46,19 +45,16 @@ class TransactionController extends Controller
         }
     }
 
-    public function callback(CallbackRequest $request, $type = 'installment')
+    public function callback(CallbackRequest $request, $type = 'installment', ?Installment $installment = null) // تابعی برای بررسی نتیجه پرداخت با استفاده از درخواست بازگشت
     {
         // یافتن تراکنش مربوطه از جدول تراکنش‌ها با استفاده از شناسه تراکنش
         $transaction = Transaction::where('gateway_result->transactionId', $request->transactionId())->first();
-
         $payment = $request
             ->amount($transaction->Price) // تصحیح متغیر cost
             ->verify();
 
         // اگر پرداخت موفق بود
         if ($payment->successful()) {
-
-            // تایید پرداخت با استفاده از تومان
 
             // گرفتن شناسه ارجاع از پرداخت
             $referenceId = $payment->referenceId();
@@ -74,10 +70,9 @@ class TransactionController extends Controller
                 'transaction' => $transaction
             ];
             if ($type === 'installment') {        // یافتن قسط مربوطه از جدول نصب
-                $installment = Installment::find($transaction->installment_id);
-
                 // به‌روزرسانی وضعیت قسط به موفق
-                $installment->update(['Payment_status' => 'Installments_paid']);
+                $installment->Payment_status = 'Paid';
+                $installment->status = 'Installments_paid'; // تغییر به وضعیت Installments_paid
                 $installment->save();
                 $data['installment'] = $installment;
             }
@@ -93,21 +88,10 @@ class TransactionController extends Controller
             ])->save();
             // به‌روزرسانی وضعیت قسط به ناموفق
             if ($type === 'installment') {
-                $installment = Installment::find($transaction->installment_id);
-                $installment->update(['status' => 'failed']); // تغییر به وضعیت failed
+                $installment->update(['status' => 'current_installments']); // تغییر به وضعیت failed
             }            // برگرداندن تراکنش به عنوان پاسخ
             return response()->json(['transaction' => $transaction]);
         } else {
-            // به‌روزرسانی تراکنش با پیام‌های خطا و وضعیت ناموفق
-            $transaction->forceFill([
-                'gateway_result->messages' => $payment->messages(),
-                'status' => 'success',
-            ])->save();
-            // به‌روزرسانی وضعیت قسط به ناموفق
-            if ($type === 'installment') {
-                $installment = Installment::find($transaction->installment_id);
-                $installment->update(['status' => 'failed']); // تغییر به وضعیت failed
-            }            // برگرداندن تراکنش به عنوان پاسخ
             return response()->json(['transaction' => $transaction]);
         }
     }
@@ -120,11 +104,10 @@ class TransactionController extends Controller
 
         $request = Toman::amount($totalPrice)
             ->description('پرداخت قسط در صندوق قرض‌الحسنه') // تغییر متن توضیحات
-            ->callback(route('payment.callback.subscription', ['type' => 'subscription']))
+            ->callback(route('payment.callback', ['type' => 'subscription']))
             ->request();
         if ($request->successful()) {
             // ایجاد یک تراکنش جدید با اطلاعات مربوطه
-//            dd($totalPrice);
             Transaction::create([
                 'user_id' => Auth::id(),
                 'gateway_result' => ['transactionId' => $request->transactionId()],

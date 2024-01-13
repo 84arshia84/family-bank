@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,9 +14,9 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('loan_id');//id وام
             $table->string('date_of_payment');//تاریخ پرداخت
-            $table->enum('Payment_status',['Paid','unpaid'])->default('unpaid');// وضعیت پرداخت
+            $table->enum('Payment_status', ['Paid', 'unpaid'])->default('unpaid');// وضعیت پرداخت
             $table->string('cost');//هزینه
-            $table->enum('status',['current_installments','Deferred_installments','Installments_paid'])->default('current_installments');
+            $table->enum('status', ['current_installments', 'Deferred_installments', 'Installments_paid'])->default('current_installments');
             $table->timestamps();
 
         });

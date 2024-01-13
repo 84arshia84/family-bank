@@ -102,8 +102,8 @@ Route::group(['prefix' => 'transaction'], function () {
     Route::get('showUserTransactionId', [TransactionController::class, 'showUserTransactionId'])->name('showUserTransactionId');;
     Route::post('paySubscription', [TransactionController::class, 'paySubscription'])->middleware('auth:sanctum')->name('paySubscription');;
 
-    Route::get('/callback/', [TransactionController::class, 'callback'])->name('payment.callback');
-    Route::get('/callback/{type}', [TransactionController::class, 'callback'])->name('payment.callback.subscription');
+    Route::get('/callback/{type}/{installment?}', [TransactionController::class, 'callback'])->name('payment.callback')
+        ->whereIn('type', ['installment', 'subscription']);
 
     Route::get('showUserPaidInstallments/{userId}', [TransactionController::class, 'showUserPaidInstallments'])->name('showUserPaidInstallments');
     Route::get('show/{id}', [TransactionController::class, 'show'])->middleware('auth:sanctum')->name('show');
