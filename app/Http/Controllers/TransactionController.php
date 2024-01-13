@@ -77,7 +77,7 @@ class TransactionController extends Controller
                 $installment = Installment::find($transaction->installment_id);
 
                 // به‌روزرسانی وضعیت قسط به موفق
-                $installment->update(['Payment_status' => 'Paid']);
+                $installment->update(['Payment_status' => 'Installments_paid']);
                 $installment->save();
                 $data['installment'] = $installment;
             }

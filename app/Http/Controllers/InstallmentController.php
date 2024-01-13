@@ -84,7 +84,6 @@ class InstallmentController extends Controller
         Auth::user();
         $installments = Installment::where('status', 'Installments_paid')  // یافتن وام هایی که وضعیت پرداخت آن ها پرداخت شده است
             ->get();
-
         // Return the response
         return response()->json([
             'data' => $installments
