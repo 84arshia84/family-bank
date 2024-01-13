@@ -116,27 +116,30 @@ class LoanController extends Controller
 
     public function Loan_details($id)
     {
-        $user = Auth::user();
-        $loan = $user->loans()->with('installments')->findOrFail($id);
+        $user = Auth::user(); // پیدا کردن یک کاربر با شناسه 1
+        $loan = $user->loans()->with('installments')->findOrFail($id); // پیدا کردن یک کاربر با شناسه 1
 
-        $lastPaidInstallment = $loan->installments->where('Payment_status', 'Paid')->last();
-        $deferredInstallments = $loan->installments->where('status', 'Deferred_installments');
+        $lastPaidInstallment = $loan->installments->where('Payment_status', 'Paid')->last(); // پیدا کردن آخرین قسط پرداخت شده
+        $deferredInstallments = $loan->installments->where('status', 'Deferred_installments');  // پیدا کردن اقساط معوقه
 
-        if ($lastPaidInstallment) {
-            $lastPaidInstallmentId = $lastPaidInstallment->id;
-        } else {
-            $lastPaidInstallmentId = null;
+        if ($lastPaidInstallment) { // اگر آخرین قسط پرداخت شده وجود داشت
+            $lastPaidInstallmentId = $lastPaidInstallment->id; // شناسه آخرین قسط پرداخت شده
+        } else { // اگر آخرین قسط پرداخت شده وجود نداشت
+            $lastPaidInstallmentId = null;  // شناسه آخرین قسط پرداخت شده
         }
 
         if ($deferredInstallments->isEmpty()) { // اگر اقساط معوقه وجود نداشت
-            $deferredInstallmentId = null;
+            $deferredInstallmentId = null; // شناسه اقساط معوقه
         } else {   // اگر اقساط معوقه وجود داشت
-            $deferredInstallmentId = $deferredInstallments->first()->cost;
+            $deferredInstallmentId = $deferredInstallments->first()->cost; // شناسه اقساط معوقه
         }
 
         return response()->json([
             'loan_id' => $loan->id,
             'loan_amount' => $loan->amount,
+             'date_of-loan' => $loan->date_of_loan, // تاریخ وام
+            'Installment_amount_every_month'=> $loan->amount / $loan->installments->count(), // مبلغ هر قسط
+            'Time_to_pay_the_next_installment'=> $loan->installments->where('Payment_status', 'unpaid')->first()->date_of_payment, // زمان پرداخت قسط بعدی
             'last_paid_installment_id' => $lastPaidInstallmentId,
             'last_paid_installment_cost' => $lastPaidInstallment ? $lastPaidInstallment->cost : null,
             'deferred_installment_id' => $deferredInstallmentId,

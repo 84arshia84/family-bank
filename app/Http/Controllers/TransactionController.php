@@ -78,6 +78,7 @@ class TransactionController extends Controller
 
                 // به‌روزرسانی وضعیت قسط به موفق
                 $installment->update(['Payment_status' => 'Paid']);
+                $installment->save();
                 $data['installment'] = $installment;
             }
             // برگرداندن شناسه ارجاع، قسط و تراکنش به عنوان پاسخ
@@ -143,7 +144,7 @@ class TransactionController extends Controller
     public function showUserTransactions()
     {
         // یافتن کاربر
-        $user=Auth::user();
+        $user = Auth::user();
 
         // اگر کاربر پیدا شد
         if ($user) {
@@ -156,6 +157,7 @@ class TransactionController extends Controller
         // اگر کاربر پیدا نشد
         return response()->json(['message' => 'کاربر مورد نظر یافت نشد.'], 404);
     }
+
     public function showUserTransactionId()
     {
         // یافتن کاربر
@@ -173,6 +175,7 @@ class TransactionController extends Controller
         // اگر کاربر پیدا نشد
         return response()->json(['message' => 'کاربر مورد نظر یافت نشد.'], 404);
     }
+
     public function Bank_receipt_photo(Request $request)
     {
         $request->validate([
@@ -200,17 +203,20 @@ class TransactionController extends Controller
         return $transaction->load('media');  // ارسال تراکنش به عنوان پاسخ
 
     }
-    public function update_status_Bank_receipt_photo    (Request $request, $id) //روت برای ادمین
+
+    public function update_status_Bank_receipt_photo(Request $request, $id) //روت برای ادمین
 
     {
         $transaction = Transaction::find($id);
         $transaction->update(['status' => $request->status]); // تغییر به وضعیت failed
         return response()->json(['transaction' => $transaction]);
     }
+
     public function show_transactions_Bank_receipt_photo(Transaction $transaction) //روت برای ادمین
     {
         return response()->json(['transactions' => $transaction->load('media')]);
     }
+
     public function updateBankReceipt(Request $request, $id)
     {
         $request->validate([
@@ -316,6 +322,7 @@ class TransactionController extends Controller
         // ارسال تراکنش به عنوان پاسخ
         return response()->json($transaction);
     }
+
     public function getTransactionDetails(Request $request, $transactionId)
     {
         // Retrieve the user ID from the request
@@ -328,7 +335,7 @@ class TransactionController extends Controller
         // Check if the transaction exists
         if ($transaction) {
             // Retrieve the user details
-            $userDetails = $transaction->user->name  . ' ' . $transaction->user->surname . ' ' . $transaction->user->family;
+            $userDetails = $transaction->user->name . ' ' . $transaction->user->surname . ' ' . $transaction->user->family;
             // Prepare the response data
             $responseData = [
                 'user_details' => $userDetails,
