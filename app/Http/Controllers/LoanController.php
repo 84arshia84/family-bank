@@ -139,6 +139,7 @@ class LoanController extends Controller
             'loan_amount' => $loan->amount,
              'date_of-loan' => $loan->date_of_loan, // تاریخ وام
             'Installment_amount_every_month'=> $loan->amount / $loan->installments->count(), // مبلغ هر قسط
+            'Time_to_pay_the_next_installment'=> $loan->installments->where('Payment_status', 'unpaid')->first()->date_of_payment, // زمان پرداخت قسط بعدی
             'last_paid_installment_id' => $lastPaidInstallmentId,
             'last_paid_installment_cost' => $lastPaidInstallment ? $lastPaidInstallment->cost : null,
             'deferred_installment_id' => $deferredInstallmentId,
