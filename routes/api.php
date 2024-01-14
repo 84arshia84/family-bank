@@ -113,5 +113,6 @@ Route::group(['prefix' => 'transaction'], function () {
     Route::post('updateBankReceipt/{id}', [TransactionController::class, 'updateBankReceipt'])->name('updateBankReceipt');
     Route::get('show_transactions_Bank_receipt_photo/{transaction}', [TransactionController::class, 'show_transactions_Bank_receipt_photo'])->name('show_transactions_Bank_receipt_photo');
     Route::get('getTransactionDetails/{transactionId}', [TransactionController::class, 'getTransactionDetails'])->name('getTransactionDetails');
+    Route::get('show_all_tarnsaction', [TransactionController::class, 'show_all_tarnsaction'])->name('show_all_tarnsaction');
 
 });

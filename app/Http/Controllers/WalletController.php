@@ -30,12 +30,16 @@ class WalletController extends Controller
     public function WalletBalance()
     {
         $user = Auth::user();
-        $transaction = Transaction::where('user_id', $user->id) // یافتن تراکنش های کاربر
-            ->where('type', 'subscription') // یافتن تراکنش های اشتراک
-            ->where('status', 'success')->sum('Price'); // جمع کردن مبلغ تراکنش های موفق
+        $transaction = Transaction::where('user_id', $user->id)
+            ->where('type', 'subscription')
+            ->where('status', 'success')->sum('Price');
 
-        $balance = $user->balance + $transaction; // جمع کردن موجودی کیف پول با مبلغ تراکنش ها
-        return response()->json("موجودی حساب شما :" . $balance); // نمایش موجودی کیف پول
+        $balance = $user->balance + $transaction;
+        $fullName = $user->name . ' ' . $user->family; // بدست آوردن نام و نام خانوادگی کاربر
+        return response()->json([
+            'balance' => $balance,
+            'fullName' => $fullName
+        ]);
     }
 
 }

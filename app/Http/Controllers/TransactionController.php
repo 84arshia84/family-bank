@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TransactionResource;
 use App\Models\Installment;
 use App\Models\Transaction;
 use App\Models\User;
@@ -222,6 +223,8 @@ class TransactionController extends Controller
                 'description' => $request->description,
                 // سایر فیلدهای مورد نیاز برای تراکنش را نیز به‌روز کنید
             ]);
+            $user_wallet = $transaction->user->wallet_balance;
+            $user_wallet += $transaction->Price;
 
             // برگرداندن تراکنش به عنوان پاسخ
             return response()->json($transaction);
@@ -339,4 +342,12 @@ class TransactionController extends Controller
             return response()->json(['error' => 'Transaction not found'], 404);
         }
     }
+
+    public function show_all_tarnsaction()
+    {
+        $transactions = Transaction::all();
+        return TransactionResource::collection($transactions);
+    }
+
+
 }
