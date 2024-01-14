@@ -11,13 +11,14 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Permission\Traits\HasRoles;
 use Stephenjude\Wallet\Interfaces\Wallet;
 use Stephenjude\Wallet\Traits\HasWallet;
 
 
 class User extends Authenticatable implements HasMedia, Wallet
 {
-    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, HasWallet;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, HasWallet, HasRoles;
 
     protected $guard_name = 'sanctum';
     /**

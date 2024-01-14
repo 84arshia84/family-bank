@@ -343,7 +343,7 @@ class TransactionController extends Controller
         }
     }
 
-    public function show_all_tarnsaction()
+    public function show_all_transaction()
     {
         $transactions = Transaction::all();
         return TransactionResource::collection($transactions);
