@@ -80,7 +80,8 @@ Route::group(['prefix' => 'installment'], function () {
 
     Route::get('find_installment/{id}', [InstallmentController::class, 'find_installment'])->name('find_installment');
     Route::get('all_installment/{user_id}', [InstallmentController::class, 'all_installment'])->name('all_installment');
-    Route::get('Installments_paid', [InstallmentController::class, 'Installments_paid'])->name('Installments_paid');
+    Route::get('Installments_paid', [InstallmentController::class, 'Installments_paid'])->middleware('auth:sanctum')->name('Installments_paid');
+    Route::get('Deferred_installments', [InstallmentController::class, 'Deferred_installments'])->middleware('auth:sanctum')->name('Deferred_installments');
     //Route::post('store', [InstallmentController::class, 'store'])->name('store');
 
 });

@@ -89,6 +89,17 @@ class InstallmentController extends Controller
             'data' => $installments
         ]);
     }
+    public function Deferred_installments()
+    {
+        // Authenticate the user
+        Auth::user();
+        $installments = Installment::where('status', 'Deferred_installments')  // یافتن وام هایی که وضعیت پرداخت آن ها پرداخت شده است
+            ->get();
+        // Return the response
+        return response()->json([
+            'data' => $installments
+        ]);
+    }
 
 
 }
