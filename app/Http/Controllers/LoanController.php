@@ -257,6 +257,7 @@ public function all_loans_for_user_status_Pending()
                     'name' => $user->name,
                     'family' => $user->family,
                     'father_name' => $user->father_name,
+                    'status'=>$user->status,
                     'national_code' => $user->national_id,
                     'loan_amount' => $loan->amount,
                     'loan_id'=>$loan->id,
