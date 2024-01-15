@@ -157,6 +157,7 @@ class UserController extends Controller
             foreach ($users as $user) {
                 $userDetails[] = [
                     'name' => $user->name,
+                    'family' => $user->family,
                     'father_name' => $user->father_name,
                     'phone_number' => $user->phone_number,
                     'national_id' => $user->national_id,
