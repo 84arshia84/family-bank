@@ -74,6 +74,7 @@ Route::group(['prefix' => 'loan',], function () {
     Route::get('Loan_details/{loan}', [LoanController::class, 'Loan_details'])->middleware('auth:sanctum')->name('Loan.details');
     Route::get('all_loans_for_user', [LoanController::class, 'all_loans_for_user'])->middleware('auth:sanctum')->name('all.loans.for.user');
     Route::get('all_users_loan_details', [LoanController::class, 'all_users_loan_details'])->name('all_users_loan_details');
+    Route::get('all_loans_for_user_status_Pending', [LoanController::class, 'all_loans_for_user_status_Pending'])->name('all_loans_for_user_status_Pending');
 
 });
 
@@ -124,6 +125,6 @@ Route::middleware('auth:sanctum')->prefix('notification')->group(function () {
     Route::get('/user', [\App\Http\Controllers\NotificationController::class, 'indexUserNotifications']);
     Route::get('/{notification}', [\App\Http\Controllers\NotificationController::class, 'show']);
     Route::post('/', [\App\Http\Controllers\NotificationController::class, 'store']);
-    Route::put('/{notification}', [\App\Http\Controllers\NotificationController::class, 'update']);
-    Route::delete('/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy']);
+//    Route::put('/{notification}', [\App\Http\Controllers\NotificationController::class, 'update']);
+//    Route::delete('/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy']);
 });
