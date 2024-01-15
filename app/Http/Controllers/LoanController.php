@@ -268,4 +268,20 @@ public function all_loans_for_user_status_Pending()
 
         return response()->json($loanData);
     }
+public function displayLoanInformation($id)
+{
+    $loan = Loan::find($id);
+
+    if (!$loan) {
+        return response()->json(['error' => 'Loan not found'], 404);
+    }
+
+    $loanData = [
+        'price' => $loan->amount,
+        'description' => $loan->description,
+        'title' => $loan->title_of_loan,
+    ];
+
+    return response()->json($loanData);
+}
 }
