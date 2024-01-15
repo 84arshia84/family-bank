@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Installment;
 use App\Models\Loan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -186,5 +187,37 @@ class LoanController extends Controller
 
         return response()->json($loanData);
     }
+
+
+
+// ...
+
+public function all_users_loan_details()
+{
+    $users = User::with(['loans' => function ($query) {
+        $query->with('installments');
+    }])->get();
+
+    $loanData = [];
+    foreach ($users as $user) {
+        foreach ($user->loans as $loan) {
+            $outstandingInstallments = $loan->installments->where('Payment_status', 'unpaid')->count();
+            $paidInstallments = $loan->installments->where('Payment_status', 'Paid')->count();
+
+            $loanData[] = [
+                'name' => $user->name,
+                'family' => $user->family,
+                'national_code' => $user->national_id,
+                'loan_amount' => $loan->amount,
+                'installment_amount' => $loan->amount / $loan->installments->count(),
+                'loan_date' => $loan->date_of_loan,
+                'outstanding_installments' => $outstandingInstallments,
+                'paid_installments' => $paidInstallments,
+            ];
+        }
+    }
+
+    return response()->json($loanData);
+}
 
 }

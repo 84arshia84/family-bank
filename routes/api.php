@@ -73,6 +73,7 @@ Route::group(['prefix' => 'loan',], function () {
     Route::post('date_of_loan/{id}', [LoanController::class, 'date_of_loan'])->name('loan.date');
     Route::get('Loan_details/{loan}', [LoanController::class, 'Loan_details'])->middleware('auth:sanctum')->name('Loan.details');
     Route::get('all_loans_for_user', [LoanController::class, 'all_loans_for_user'])->middleware('auth:sanctum')->name('all.loans.for.user');
+    Route::get('all_users_loan_details', [LoanController::class, 'all_users_loan_details'])->name('all_users_loan_details');
 
 });
 
