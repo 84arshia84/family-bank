@@ -117,3 +117,12 @@ Route::group(['prefix' => 'transaction'], function () {
     Route::get('show_all_transaction', [TransactionController::class, 'show_all_transaction'])->name('transaction.show.all');
 
 });
+
+Route::middleware('auth:sanctum')->prefix('notification')->group(function () {
+    Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index']);
+    Route::get('/user', [\App\Http\Controllers\NotificationController::class, 'indexUserNotifications']);
+    Route::get('/{notification}', [\App\Http\Controllers\NotificationController::class, 'show']);
+    Route::post('/', [\App\Http\Controllers\NotificationController::class, 'store']);
+    Route::put('/{notification}', [\App\Http\Controllers\NotificationController::class, 'update']);
+    Route::delete('/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy']);
+});

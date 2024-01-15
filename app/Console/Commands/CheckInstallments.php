@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Events\InstallmentHasBeenDeferred;
 use App\Models\Installment;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -37,6 +38,7 @@ class CheckInstallments extends Command
                     'status' => 'Deferred_installments'
                 ]
             );
+            event(new InstallmentHasBeenDeferred($installment));
         }
     }
 }
