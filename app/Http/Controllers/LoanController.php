@@ -243,4 +243,28 @@ public function all_loans_for_user_status_Pending()
 
     return response()->json($loanData);
 }
+    public function all_loans_for_user_status_accept()
+    {
+        $users = User::with(['loans' => function ($query) {
+            $query->where('status', 'accept')->with('installments');
+        }])->get();
+
+        $loanData = [];
+        foreach ($users as $user) {
+            foreach ($user->loans as $loan) {
+
+                $loanData[] = [
+                    'name' => $user->name,
+                    'family' => $user->family,
+                    'father_name' => $user->father_name,
+                    'national_code' => $user->national_id,
+                    'loan_amount' => $loan->amount,
+                    'loan_id'=>$loan->id,
+                    'loan_date' => $loan->date_of_loan,
+                ];
+            }
+        }
+
+        return response()->json($loanData);
+    }
 }

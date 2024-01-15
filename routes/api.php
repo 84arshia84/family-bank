@@ -75,6 +75,7 @@ Route::group(['prefix' => 'loan',], function () {
     Route::get('all_loans_for_user', [LoanController::class, 'all_loans_for_user'])->middleware('auth:sanctum')->name('all.loans.for.user');
     Route::get('all_users_loan_details', [LoanController::class, 'all_users_loan_details'])->name('all_users_loan_details');
     Route::get('all_loans_for_user_status_Pending', [LoanController::class, 'all_loans_for_user_status_Pending'])->name('all_loans_for_user_status_Pending');
+    Route::get('all_loans_for_user_status_accept', [LoanController::class, 'all_loans_for_user_status_accept'])->name('all_loans_for_user_status_accept');
 
 });
 
