@@ -25,10 +25,9 @@ class LoginController extends Controller
         // ایجاد توکن برای کاربر
         $token = $user->createToken('api_token')->plainTextToken;
 
-
         // برگرداندن پاسخ به کلاینت
         return response()->json([
-            'user' => $user->load('role'), // برگرداندن اطلاعات مهم کاربر
+            'user' => $user->only(['id', 'name', 'phone_number']), // برگرداندن اطلاعات مهم کاربر
             'token' => $token,
         ]);
     }
