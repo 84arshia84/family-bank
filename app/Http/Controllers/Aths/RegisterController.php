@@ -13,11 +13,10 @@ class RegisterController extends Controller
 {
     public function sendVerificationCode(Request $request)
     {
-//        $rand = rand(1000, 9999);
+        $rand = rand(1000, 9999);
         $request->validate([
             'phone_number' => 'required|regex:/(09)[0-9]{9}/|unique:users',
         ]);
-        $rand = 1234;
         $timeValid = Carbon::now()->addMinutes(555555);
         $send_sms = TempCode::updateOrCreate([
             'phone_number' => $request->phone_number,
