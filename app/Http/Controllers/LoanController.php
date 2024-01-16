@@ -165,6 +165,7 @@ class LoanController extends Controller
         foreach ($loans as $loan) {
             $loanData[] = [
                 'id' => $loan->id,
+                'date_of_loan'=>$loan->date_of_loan,
                 'title_of_loan' => $loan->title_of_loan,
                 'amount' => $loan->amount,
                 'description' => $loan->description,
