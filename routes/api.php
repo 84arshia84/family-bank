@@ -121,7 +121,7 @@ Route::group(['prefix' => 'transaction'], function () {
 
 });
 
-Route::middleware('auth:sanctum')->prefix('notification')->group(function () {
+Route::prefix('notification')->group(function () {
     Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index']);
     Route::get('/user', [\App\Http\Controllers\NotificationController::class, 'indexUserNotifications']);
     Route::get('/{notification}', [\App\Http\Controllers\NotificationController::class, 'show']);
