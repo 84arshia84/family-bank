@@ -6,6 +6,7 @@ use App\Http\Controllers\Aths\RegisterController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\paymentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
@@ -22,7 +23,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -57,7 +57,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('Email_update_for_user', [UserController::class, 'Email_update_for_user'])->middleware('auth:sanctum')->name('user.Email.update');
     Route::post('profile_for_user', [UserController::class, 'profile_for_user'])->middleware('auth:sanctum')->name('user.profile.img');
 
-    Route::get('show_user_details/{user}', [UserController::class, 'show_user_details'])->name('user.show.details');
+    Route::get('show_user_details', [UserController::class, 'show_user_details'])->name('user.show.details');
 
 });
 Route::group(['prefix' => 'bank', 'middleware' => 'auth:sanctum'], function () {
@@ -72,6 +72,10 @@ Route::group(['prefix' => 'loan',], function () {
     Route::post('date_of_loan/{id}', [LoanController::class, 'date_of_loan'])->name('loan.date');
     Route::get('Loan_details/{loan}', [LoanController::class, 'Loan_details'])->middleware('auth:sanctum')->name('Loan.details');
     Route::get('all_loans_for_user', [LoanController::class, 'all_loans_for_user'])->middleware('auth:sanctum')->name('all.loans.for.user');
+    Route::get('all_users_loan_details', [LoanController::class, 'all_users_loan_details'])->name('all_users_loan_details');
+    Route::get('all_loans_for_user_status_Pending', [LoanController::class, 'all_loans_for_user_status_Pending'])->name('all_loans_for_user_status_Pending');
+    Route::get('all_loans_for_user_status_accept', [LoanController::class, 'all_loans_for_user_status_accept'])->name('all_loans_for_user_status_accept');
+    Route::get('displayLoanInformation/{id}', [LoanController::class, 'displayLoanInformation'])->name('displayLoanInformation');
 
 });
 
@@ -123,6 +127,6 @@ Route::middleware('auth:sanctum')->prefix('notification')->group(function () {
     Route::get('/{notification}', [\App\Http\Controllers\NotificationController::class, 'show']);
     Route::post('/', [\App\Http\Controllers\NotificationController::class, 'store']);
     Route::post('/all-users', [\App\Http\Controllers\NotificationController::class, 'storeForAllUsers']);
-    Route::put('/{notification}', [\App\Http\Controllers\NotificationController::class, 'update']);
-    Route::delete('/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy']);
+//    Route::put('/{notification}', [\App\Http\Controllers\NotificationController::class, 'update']);
+//    Route::delete('/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy']);
 });

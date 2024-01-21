@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Installment;
 use App\Models\Loan;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -164,6 +165,7 @@ class LoanController extends Controller
         foreach ($loans as $loan) {
             $loanData[] = [
                 'id' => $loan->id,
+                'date_of_loan'=>$loan->date_of_loan,
                 'title_of_loan' => $loan->title_of_loan,
                 'amount' => $loan->amount,
                 'description' => $loan->description,
@@ -187,4 +189,100 @@ class LoanController extends Controller
         return response()->json($loanData);
     }
 
+
+
+// ...
+
+    public function all_users_loan_details()
+    {
+        $users = User::with(['loans' => function ($query) {
+            $query->with('installments');
+        }])->get();
+
+        $loanData = [];
+        foreach ($users as $user) {
+            foreach ($user->loans as $loan) {
+                $outstandingInstallments = $loan->installments->where('Payment_status', 'unpaid')->count();
+                $paidInstallments = $loan->installments->where('Payment_status', 'Paid')->count();
+
+                $loanData[] = [
+                    'name' => $user->name,
+                    'family' => $user->family,
+                    'national_code' => $user->national_id,
+                    'loan_amount' => $loan->amount,
+                    'installment_amount' => $loan->amount / $loan->installments->count(),
+                    'loan_date' => $loan->date_of_loan,
+                    'outstanding_installments' => $outstandingInstallments,
+                    'paid_installments' => $paidInstallments,
+                ];
+            }
+        }
+
+    return response()->json($loanData);
+}
+public function all_loans_for_user_status_Pending()
+{
+    $users = User::with(['loans' => function ($query) {
+        $query->where('status', 'Pending')->with('installments');
+    }])->get();
+
+    $loanData = [];
+    foreach ($users as $user) {
+        foreach ($user->loans as $loan) {
+
+            $loanData[] = [
+                'name' => $user->name,
+                'family' => $user->family,
+                'father_name' => $user->father_name,
+                'national_code' => $user->national_id,
+                'loan_amount' => $loan->amount,
+                'loan_id'=>$loan->id,
+                'loan_date' => $loan->date_of_loan,
+            ];
+        }
+    }
+
+    return response()->json($loanData);
+}
+    public function all_loans_for_user_status_accept()
+    {
+        $users = User::with(['loans' => function ($query) {
+            $query->where('status', 'accept')->with('installments');
+        }])->get();
+
+        $loanData = [];
+        foreach ($users as $user) {
+            foreach ($user->loans as $loan) {
+
+                $loanData[] = [
+                    'name' => $user->name,
+                    'family' => $user->family,
+                    'father_name' => $user->father_name,
+                    'status'=>$user->status,
+                    'national_code' => $user->national_id,
+                    'loan_amount' => $loan->amount,
+                    'loan_id'=>$loan->id,
+                    'loan_date' => $loan->date_of_loan,
+                ];
+            }
+        }
+
+        return response()->json($loanData);
+    }
+public function displayLoanInformation($id)
+{
+    $loan = Loan::find($id);
+
+    if (!$loan) {
+        return response()->json(['error' => 'Loan not found'], 404);
+    }
+
+    $loanData = [
+        'price' => $loan->amount,
+        'description' => $loan->description,
+        'title' => $loan->title_of_loan,
+    ];
+
+    return response()->json($loanData);
+}
 }

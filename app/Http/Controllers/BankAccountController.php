@@ -29,4 +29,5 @@ class BankAccountController extends Controller
         return response()->json(["add_user" => $BankAccount]);
     }
 
+
 }

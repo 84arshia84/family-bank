@@ -346,8 +346,24 @@ class TransactionController extends Controller
     public function show_all_transaction()
     {
         $transactions = Transaction::all();
-        return TransactionResource::collection($transactions);
+
+        $transactionData = [];
+
+        foreach ($transactions as $transaction) {
+            $user = $transaction->user;
+            $userDetails = $user->name . ' ' . $user->surname . ' ' . $user->family;
+
+            $transactionData[] = [
+                'user_details' => $userDetails,
+                'transaction_id' => $transaction->id,
+                'transaction_date' => $transaction->created_at,
+                'tracking_code' => $transaction->gateway_result,
+                'amount' => $transaction->Price,
+                'description' => $transaction->description,
+                'user_id' => $transaction->user_id,
+            ];
+        }
+
+        return response()->json($transactionData);
     }
-
-
 }

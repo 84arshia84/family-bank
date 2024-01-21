@@ -63,7 +63,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Installment whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Installment whereUpdatedAt($value)
  */
-	class Installment extends \Eloquent implements \Spatie\MediaLibrary\HasMedia {}
+
 }
 
 namespace App\Models{
