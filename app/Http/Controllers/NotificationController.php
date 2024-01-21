@@ -34,6 +34,25 @@ class NotificationController extends Controller
         return response()->json($notifications);
     }
 
+    public function storeForAllUsers(Request $request): JsonResponse
+    {
+        $request->validate([
+            'date' => 'nullable|date|date_format:Y-m-d',
+            'text' => 'required|string',
+        ]);
+        $notifications = [];
+        $users = User::all('id');
+        foreach ($users as $user) {
+            $notifications [] = [
+                'date' => $request->date ?? now()->toDateString(),
+                'text' => $request->text,
+                'user_id' => $user->id
+            ];
+        }
+        Notification::insert($notifications);
+        return response()->json(['message' => 'notifications created successfully']);
+    }
+
     public function show(Notification $notification): JsonResponse
     {
         return response()->json($notification);

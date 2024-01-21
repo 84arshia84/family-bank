@@ -6,7 +6,6 @@ use App\Http\Controllers\Aths\RegisterController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\LoanController;
-use App\Http\Controllers\paymentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
@@ -123,6 +122,7 @@ Route::middleware('auth:sanctum')->prefix('notification')->group(function () {
     Route::get('/user', [\App\Http\Controllers\NotificationController::class, 'indexUserNotifications']);
     Route::get('/{notification}', [\App\Http\Controllers\NotificationController::class, 'show']);
     Route::post('/', [\App\Http\Controllers\NotificationController::class, 'store']);
+    Route::post('/all-users', [\App\Http\Controllers\NotificationController::class, 'storeForAllUsers']);
     Route::put('/{notification}', [\App\Http\Controllers\NotificationController::class, 'update']);
     Route::delete('/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy']);
 });
