@@ -80,14 +80,10 @@ class InstallmentController extends Controller
     }
     public function Installments_paid()
     {
-        // Find the user
-        $user = Auth::user();
-
-        // Get the installments paid by the user
-        $installments = $user->loans()->whereHas('installments', function ($query) { // یافتن وام هایی که وضعیت پرداخت آن ها پرداخت شده است
-            $query->where('status', 'Installments_paid');// یافتن وام هایی که وضعیت پرداخت آن ها پرداخت شده است
-        })->with('installment ')->get();
-
+        // Authenticate the user
+        Auth::user();
+        $installments = Installment::where('status', 'Installments_paid')  // یافتن وام هایی که وضعیت پرداخت آن ها پرداخت شده است
+            ->get();
         // Return the response
         return response()->json([
             'data' => $installments
