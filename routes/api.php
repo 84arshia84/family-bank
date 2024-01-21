@@ -57,6 +57,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('change_password', [UserController::class, 'change_password'])->middleware('auth:sanctum')->name('user.change.password');
     Route::post('Email_update_for_user', [UserController::class, 'Email_update_for_user'])->middleware('auth:sanctum')->name('user.Email.update');
     Route::post('profile_for_user', [UserController::class, 'profile_for_user'])->middleware('auth:sanctum')->name('user.profile.img');
+    Route::get('show_user_and_bank_info', [UserController::class, 'show_user_and_bank_info'])->middleware('auth:sanctum')->name('show_user_and_bank_info');
 
     Route::get('show_user_details', [UserController::class, 'show_user_details'])->name('user.show.details');
 
