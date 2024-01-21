@@ -192,6 +192,25 @@ class UserController extends Controller
                 'Returning_the_deleted_user'
             ]);
         }
+    public function show_user_and_bank_info ()
+    {
+        $user=Auth::user();
+        $userDetails = [
+            'name' => $user->name,
+            'family' => $user->family,
+            'father_name' => $user->father_name,
+            'phone_number' => $user->phone_number,
+            'national_id' => $user->national_id,
+            'created_at' => $user->created_at,
+            'wallet_balance' => $user->balance,
+            'status' => $user->status,
+        ];
+        $userDetails['bank_account'] = $user->bankAccount;
+        $userDetails['profile']=$user->getMedia('profile');
+        return response()->json(['user_info' => $userDetails]);
+
+    }
+
 
 }
 }
