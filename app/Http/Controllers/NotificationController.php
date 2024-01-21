@@ -17,11 +17,21 @@ class NotificationController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        return response()->json(Notification::make($request->validate([
+        $request->validate([
             'date' => 'required|date',
             'text' => 'required|string',
-            'user_id' => ['required|integer', Rule::exists('users', 'id')],
-        ])));
+            'user_ids' => 'required|array',
+            'user_ids.*' => 'required|integer|exists:users,id'
+        ]);
+        $notifications = [];
+        foreach ($request->user_ids as $user_id) {
+            $notifications[] = Notification::create([
+                'date' => $request->date,
+                'text' => $request->text,
+                'user_id' => $user_id
+            ]);
+        }
+        return response()->json($notifications);
     }
 
     public function show(Notification $notification): JsonResponse
