@@ -77,7 +77,7 @@ Route::group(['prefix' => 'loan',], function () {
     Route::get('all_loans_for_user_status_Pending', [LoanController::class, 'all_loans_for_user_status_Pending'])->name('all_loans_for_user_status_Pending');
     Route::get('all_loans_for_user_status_accept', [LoanController::class, 'all_loans_for_user_status_accept'])->name('all_loans_for_user_status_accept');
     Route::get('displayLoanInformation/{id}', [LoanController::class, 'displayLoanInformation'])->name('displayLoanInformation');
-    Route::get('checkAndSetLoanStatus', [LoanController::class, 'checkAndSetLoanStatus'])->name('checkAndSetLoanStatus');
+    Route::get('checkAndSetLoanStatus/{id}', [LoanController::class, 'checkAndSetLoanStatus'])->name('checkAndSetLoanStatus');
 
 });
 
