@@ -77,6 +77,7 @@ Route::group(['prefix' => 'loan',], function () {
     Route::get('all_loans_for_user_status_Pending', [LoanController::class, 'all_loans_for_user_status_Pending'])->name('all_loans_for_user_status_Pending');
     Route::get('all_loans_for_user_status_accept', [LoanController::class, 'all_loans_for_user_status_accept'])->name('all_loans_for_user_status_accept');
     Route::get('displayLoanInformation/{id}', [LoanController::class, 'displayLoanInformation'])->name('displayLoanInformation');
+    Route::get('checkAndSetLoanStatus', [LoanController::class, 'checkAndSetLoanStatus'])->name('checkAndSetLoanStatus');
 
 });
 
@@ -119,6 +120,7 @@ Route::group(['prefix' => 'transaction'], function () {
     Route::get('show_transactions_Bank_receipt_photo/{transaction}', [TransactionController::class, 'show_transactions_Bank_receipt_photo'])->name('show.transactions.Bank.receipt.photo');
     Route::get('getTransactionDetails/{transactionId}', [TransactionController::class, 'getTransactionDetails'])->name('getTransactionDetails');
     Route::get('show_all_transaction', [TransactionController::class, 'show_all_transaction'])->name('transaction.show.all');
+    Route::get('The_sum_of_users_wallets', [TransactionController::class, 'The_sum_of_users_wallets'])->name('The_sum_of_users_wallets');
 
 });
 

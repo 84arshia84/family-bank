@@ -366,4 +366,15 @@ class TransactionController extends Controller
 
         return response()->json($transactionData);
     }
+    public function The_sum_of_users_wallets ()
+    {
+        $users = User::all();
+        $sum = 0;
+        foreach ($users as $user) {
+            $sum += $user->balance;
+        }
+        return response()->json(['The_sum_total_of_users_wallets' => $sum]);
+    }
+
 }
+

@@ -285,4 +285,31 @@ public function displayLoanInformation($id)
 
     return response()->json($loanData);
 }
+    public function checkAndSetLoanStatus($id)
+    {
+        // Retrieve the loan by its ID
+        $loan = Loan::find($id);
+
+        // Check if the loan exists
+        if (!$loan) {
+            return response()->json(['error' => 'Loan not found'], 404);
+        }
+
+        // Retrieve all installments related to the loan
+        $installments = $loan->installments;
+
+        // Check if all installments have a status of 'paid'
+        foreach ($installments as $installment) {
+            if ($installment->Payment_status != 'Paid') {
+                return response()->json(['message' => 'Not all installments are paid']);
+            }
+        }
+
+        // If all installments are paid, set the status of the loan to 'paid'
+        $loan->Payment_status = 'paid';
+        $loan->save();
+
+        // Return a success message
+        return response()->json(['message' => 'Loan status updated to paid']);
+    }
 }

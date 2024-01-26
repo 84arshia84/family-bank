@@ -194,7 +194,7 @@ class UserController extends Controller
         }
     public function show_user_and_bank_info ()
     {
-        $user=Auth::user();
+        $user = Auth::user();
         $userDetails = [
             'name' => $user->name,
             'family' => $user->family,
@@ -205,12 +205,14 @@ class UserController extends Controller
             'wallet_balance' => $user->balance,
             'status' => $user->status,
         ];
-        $userDetails['bank_account'] = $user->bankAccount;
-        $userDetails['profile']=$user->getMedia('profile');
-        return response()->json(['user_info' => $userDetails]);
-
+        $userBankAccount = $user->bankAccount;
+        $userProfile = $user->getMedia('profile');
+        return response()->json([
+            'user_info' => $userDetails,
+            'user_bank_account' => $userBankAccount,
+            'user_profile' => $userProfile
+        ]);
     }
-
 
 }
 }
