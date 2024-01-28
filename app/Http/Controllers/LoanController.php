@@ -285,31 +285,41 @@ public function displayLoanInformation($id)
 
     return response()->json($loanData);
 }
-    public function checkAndSetLoanStatus($id)
+    public function checkAndSetLoanStatus()
     {
-        // Retrieve the loan by its ID
-        $loan = Loan::find($id);
+        // Retrieve the current authenticated user
+        $user = Auth::user();
 
-        // Check if the loan exists
-        if (!$loan) {
-            return response()->json(['error' => 'Loan not found'], 404);
-        }
+        // Retrieve all loans related to the user
+        $loans = $user->loans;
 
-        // Retrieve all installments related to the loan
-        $installments = $loan->installments;
-
-        // Check if all installments have a status of 'paid'
-        foreach ($installments as $installment) {
-            if ($installment->Payment_status != 'Paid') {
-                return response()->json(['message' => 'Not all installments are paid']);
+        // Iterate over each loan
+        foreach ($loans as $loan) {
+            // Retrieve all installments related to the loan
+            $installments = $loan->installments;
+            $paidInstallments = [];
+            // Check if all installments have a status of 'paid'
+            foreach ($installments as $installment) {
+                if ($installment->Payment_status == 'Paid') {
+                    array_push($paidInstallments , $installment);
+                }
             }
-        }
+                    return response()->json([$paidInstallments]);
 
-        // If all installments are paid, set the status of the loan to 'paid'
-        $loan->Payment_status = 'paid';
-        $loan->save();
+            // If all installments are paid, set the status of the loan to 'paid'
+            $loan->Payment_status = 'paid';
+            $loan->save();
+        }
 
         // Return a success message
-        return response()->json(['message' => 'Loan status updated to paid']);
+        return response()->json(['message' => 'Loan status updated to paid for all user loans']);
+    }
+    public function showPaidLoans()
+    {
+        // Retrieve all loans where payment_status is 'paid'
+        $paidLoans = Loan::where('payment_status', 'paid')->get();
+
+        // Return the loans
+        return response()->json($paidLoans);
     }
 }

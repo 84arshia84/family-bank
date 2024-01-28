@@ -206,7 +206,7 @@ class UserController extends Controller
             'status' => $user->status,
         ];
         $userBankAccount = $user->bankAccount;
-        $userProfile = $user->getMedia('profile');
+        $userProfile = $user->getFirstMediaUrl('profile');
         return response()->json([
             'user_info' => $userDetails,
             'user_bank_account' => $userBankAccount,

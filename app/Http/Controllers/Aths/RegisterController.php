@@ -8,6 +8,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use IPPanel\Client;
+use function Symfony\Component\String\u;
 
 class RegisterController extends Controller
 {
@@ -58,6 +59,7 @@ class RegisterController extends Controller
         if ($request->hasFile('img')) {
             $user->addMediaFromRequest('img')->toMediaCollection('national_card_imag');
         }
+        $user->assignRole('user');
         // اینجا باید کاربر را با حذف فیلد‌های شماره تلفن و ایمیل برگردانید
         return response()->json(['user' => $user, 'token' => $user->createToken('auth_token')->plainTextToken]);
 

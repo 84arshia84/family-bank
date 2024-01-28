@@ -24,5 +24,7 @@ class UserSeeder extends Seeder
             "password"=>'185'
         ]);
 
+        $user->assignRole('admin');
+
     }
 }

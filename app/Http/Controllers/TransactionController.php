@@ -142,7 +142,7 @@ class TransactionController extends Controller
         return response()->json(['message' => 'کاربر مورد نظر یافت نشد.'], 404);
     }
 
-    public function showUserTransactionId()
+    public function showUserTransactionId($userId)
     {
         // یافتن کاربر
         $userId = auth()->id();
