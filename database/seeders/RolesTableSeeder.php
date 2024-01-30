@@ -17,7 +17,7 @@ class RolesTableSeeder extends Seeder
         $admin = Role::create(['name' => 'admin']);
         $user = Role::create(['name' => 'user']);
         // اضافه کردن رول‌های دیگر
-$user->givePermissionTo('loan.add','loan.delete','Loan.details','all.loans.for.user','add.Bank.account',
+$user->givePermissionTo('loan.add','loan.delete','Loan.details','all.loans.for.user',
     'all.loans.for.user.status.accept','all.loans.for.user.status.Pending','displayLoanInformation',
     'installment.find','installment.all','Installments.paid','installment.Deferred','user.show.info',
     'user.change.password','user.profile.img','user.Email.update','user.profile.img','Transactions.show.user',
