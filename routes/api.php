@@ -154,7 +154,8 @@ Route::group(['prefix' => 'user'], function () {
     });
 
     Route::group(['prefix' => 'wallet'], function () {
-        Route::post('WalletBalance', [WalletController::class, 'WalletBalance'])->middleware(['auth:sanctum','permission:WalletBalance'])->name('WalletBalance');
+        Route::get('WalletBalance', [WalletController::class, 'WalletBalance'])->middleware(['auth:sanctum','permission:WalletBalance'])->name('WalletBalance');
+        Route::post('The_sum_of_users_wallets', [WalletController::class, 'The_sum_of_users_wallets'])->name('The_sum_of_users_wallets');
     });
 
 

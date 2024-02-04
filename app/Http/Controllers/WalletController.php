@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,7 +42,13 @@ class WalletController extends Controller
             'fullName' => $fullName
         ]);
     }
+    public function The_sum_of_users_wallets()
 
+    {
+        $totalBalance = User::sum('balance');
+
+        return response()->json(['total_cash' => number_format($totalBalance, 2)]);
+    }
 }
 
 ;
