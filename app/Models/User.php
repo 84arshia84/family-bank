@@ -12,13 +12,12 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
-use Stephenjude\Wallet\Interfaces\Wallet;
-use Stephenjude\Wallet\Traits\HasWallet;
 
 
-class User extends Authenticatable implements HasMedia, Wallet
+
+class User extends Authenticatable implements HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, HasWallet, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, InteractsWithMedia, HasRoles;
 
     protected $guard_name = 'sanctum';
     /**

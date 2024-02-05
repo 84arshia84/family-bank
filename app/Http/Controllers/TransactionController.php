@@ -223,7 +223,7 @@ class TransactionController extends Controller
                 'description' => $request->description,
                 // سایر فیلدهای مورد نیاز برای تراکنش را نیز به‌روز کنید
             ]);
-            $user_wallet = $transaction->user->wallet_balance;
+            $user_wallet = $transaction->user->balance;
             $user_wallet += $transaction->Price;
 
             // برگرداندن تراکنش به عنوان پاسخ

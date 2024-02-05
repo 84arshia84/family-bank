@@ -23,7 +23,6 @@ class UserSeeder extends Seeder
             "national_id"=>'1810808080',
             "password"=>'185'
         ]);
-
         $user->assignRole('admin');
 
     }

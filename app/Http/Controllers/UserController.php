@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -87,7 +88,7 @@ class UserController extends Controller
             'name' => $user->name,
             'family' => $user->family,
             'created_at' => $user->created_at,
-            'wallet_balance' => $user->balance, // اگر نام مدل کیف پول Wallet است، باید متناسب با آن تغییر کند
+            'balance' => $user->balance, // اگر نام مدل کیف پول Wallet است، باید متناسب با آن تغییر کند
             'status' => $user->status,
         ];
 
@@ -162,7 +163,7 @@ class UserController extends Controller
                     'phone_number' => $user->phone_number,
                     'national_id' => $user->national_id,
                     'created_at' => $user->created_at,
-                    'wallet_balance' => $user->balance,
+                    'balance' => $user->balance,
                     'status' => $user->status,
                 ];
             }
@@ -202,7 +203,7 @@ class UserController extends Controller
             'phone_number' => $user->phone_number,
             'national_id' => $user->national_id,
             'created_at' => $user->created_at,
-            'wallet_balance' => $user->balance,
+            'balance' => $user->balance,
             'status' => $user->status,
         ];
         $userBankAccount = $user->bankAccount;
@@ -213,6 +214,58 @@ class UserController extends Controller
             'user_profile' => $userProfile
         ]);
     }
+    public function showAdmins()
+    {
+        $admins = User::whereHas('roles', function ($query) {
+            $query->where('name', 'admin');
+        })->get();
 
+        return response()->json($admins);
+    }
+    public function monthlyUserDeposits()
+    {
+        $users = User::all();
+        $monthlyDeposits = [];
+        $totalMonthlyDeposits = [];
+
+        foreach ($users as $user) {
+            $transactions = Transaction::where('user_id', $user->id)
+                ->where('status', 'success')
+                ->get()
+                ->groupBy(function($item) {
+                    return $item->created_at->format('Y-m');
+                });
+
+            $userDeposits = [];
+            foreach ($transactions as $month => $transactionGroup) {
+                $userDeposits[$month] = $transactionGroup->sum('Price');
+                if (!isset($totalMonthlyDeposits[$month])) {
+                    $totalMonthlyDeposits[$month] = 0;
+                }
+                $totalMonthlyDeposits[$month] += $userDeposits[$month];
+            }
+
+            $monthlyDeposits[$user->id] = $userDeposits;
+        }
+
+        return response()->json([
+
+            'total_deposits' => $totalMonthlyDeposits
+        ]);
+    }
+    public function showAllInactiveUserBalances()
+    {
+        // Find the user by id
+        $user = User::all();
+
+        // Check if the user's status is inactive
+        if ($user->status == 'inactive') {
+            // Return the user's wallet balance
+            return response()->json(['balance' => $user->balance]);
+        }
+
+        // If the user's status is not inactive, return an appropriate message
+        return response()->json(['message' => 'User status is not inactive']);
+    }
 }
 }

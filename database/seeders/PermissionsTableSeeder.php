@@ -36,7 +36,7 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'loan.delete']); // حذف وام
         Permission::create(['name' => 'Returning.the.deleted.loan']);  // بازگردانی وام حذف شده
         Permission::create(['name' => 'List.of.loans']);   // لیست وام‌ها
-        Permission::create(['name' => 'loan.update.status ']); // ویرایش وضعیت وام
+        Permission::create(['name' => 'loan.update.status']); // ویرایش وضعیت وام
         Permission::create(['name' => 'loan.date']);   // تاریخ وام
         Permission::create(['name' => 'Loan.details']);    // جزئیات وام
         Permission::create(['name' => 'all.loans.for.user']);  // لیست وام‌های کاربر
@@ -70,6 +70,8 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'showPaidLoans']);
         Permission::create(['name' => 'checkAndSetLoanStatus']);
         Permission::create(['name' => 'The.sum.of.users.wallets']);
+        Permission::create(['name' => 'TransactionId.show.User']);
+        Permission::create(['name' => 'Bank.update.Receipt']);
 
         // اضافه کردن پرمیشن‌های دیگر
     }
