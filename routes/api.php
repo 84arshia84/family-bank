@@ -75,6 +75,7 @@ Route::prefix('notification')->group(function () {
     Route::get('/{notification}', [\App\Http\Controllers\NotificationController::class, 'show']);
     Route::post('/', [\App\Http\Controllers\NotificationController::class, 'store']);
     Route::post('/all-users', [\App\Http\Controllers\NotificationController::class, 'storeForAllUsers']);
+    Route::post('/request-withdrawal', [\App\Http\Controllers\NotificationController::class, 'storeRequestWithdrawal']);
 //    Route::put('/{notification}', [\App\Http\Controllers\NotificationController::class, 'update']);
 //    Route::delete('/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy']);
 });
