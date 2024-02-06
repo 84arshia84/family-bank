@@ -123,7 +123,7 @@ Route::group(['prefix' => 'admin'], function () {
 Route::group(['prefix' => 'user'], function () {
 
     Route::group(['prefix' => 'bank', 'middleware' => 'auth:sanctum'], function () {
-        Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add.Bank.account')->middleware('permission:add.Bank.account');
+        Route::post('add_Bank_account', [BankAccountController::class, 'add_Bank_account'])->name('add.Bank.account')->middleware(['auth:sanctum','permission:add.Bank.account']);
     });
     Route::group(['prefix' => 'loan',], function () {
 
