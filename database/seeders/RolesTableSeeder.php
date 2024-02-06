@@ -22,7 +22,7 @@ $user->givePermissionTo('loan.add','loan.delete','Loan.details','all.loans.for.u
     'installment.find','installment.all','Installments.paid','installment.Deferred','user.show.info',
     'user.change.password','user.profile.img','user.Email.update','user.profile.img','Transactions.show.user',
     'showUserPaidInstallments','user.show.and.bank.info','paySubscription','transaction.show','WalletBalance',
-    'Bank.receipt.photo');
+    'Bank.receipt.photo','add.Bank.account');
     $admin->givePermissionTo(Permission::all());
     }
 
