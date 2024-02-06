@@ -182,14 +182,14 @@ Route::group(['prefix' => 'user'], function () {
     });
 
     Route::group(['prefix' => 'wallet'], function () {
-<<<<<<< HEAD
+
 
         Route::get('WalletBalance', [WalletController::class, 'WalletBalance'])->middleware(['auth:sanctum','permission:WalletBalance'])->name('WalletBalance');
 
         Route::post('all_balance_whit_all_user', [WalletController::class, 'all_balance_whit_all_user'])->name('all_balance_whit_all_user');
-=======
+
         Route::post('WalletBalance', [WalletController::class, 'WalletBalance'])->middleware(['auth:sanctum','permission:WalletBalance'])->name('WalletBalance');
->>>>>>> parent of d59fab3 (wallet)
+
     });
 
 
