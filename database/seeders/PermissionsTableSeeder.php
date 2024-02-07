@@ -73,6 +73,17 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'TransactionId.show.User']);
         Permission::create(['name' => 'Bank.update.Receipt']);
 
+
+        Permission::create(['name' => 'notification.store.request.withdrawal']);
+        Permission::create(['name' => 'notification.store.for.all.users']);
+        Permission::create(['name' => 'notification.store']);
+        Permission::create(['name' => 'notification.show']);
+        Permission::create(['name' => 'notification.index.user']);
+        Permission::create(['name' => 'notification.index']);
+        Permission::create(['name' => 'user.show.and.bank.info_id']);
+
+
+
         // اضافه کردن پرمیشن‌های دیگر
     }
 }

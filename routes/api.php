@@ -6,6 +6,7 @@ use App\Http\Controllers\Aths\RegisterController;
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\InstallmentController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\paymentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
@@ -70,18 +71,20 @@ Route::group(['prefix' => 'transaction'], function () {
 });
 
 Route::prefix('notification')->group(function () {
-    Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index']);
-    Route::get('/user', [\App\Http\Controllers\NotificationController::class, 'indexUserNotifications']);
-    Route::get('/{notification}', [\App\Http\Controllers\NotificationController::class, 'show']);
-    Route::post('/', [\App\Http\Controllers\NotificationController::class, 'store']);
-    Route::post('/all-users', [\App\Http\Controllers\NotificationController::class, 'storeForAllUsers']);
-    Route::post('/request-withdrawal', [\App\Http\Controllers\NotificationController::class, 'storeRequestWithdrawal']);
+    Route::get('index', [NotificationController::class, 'index'])->name('notification.index')->middleware(['auth:sanctum','permission:notification.index']);    //این روت برای نمایش اعلان ها
+    Route::get('user',[NotificationController::class, 'indexUserNotifications'])->name('notification.index.user')->middleware(['auth:sanctum','permission:notification.index.user']);   //این روت برای نمایش اعلان های یک کاربر
+    Route::get('notification',[ NotificationController::class, 'show'])->name('notification.show')->middleware(['auth:sanctum','permission:notification.show']);    //این روت برای نمایش اعلان برای یک کاربر
+    Route::post('store', [NotificationController::class, 'store'])->name('notification.store')->middleware(['auth:sanctum','permission:notification.store']);   //این روت برای ارسال اعلان برای یک کاربر
+    Route::post('all-users',[ NotificationController::class, 'storeForAllUsers'])->name('notification.store.for.all.users')->middleware(['auth:sanctum','permission:notification.store.for.all.users']);    //این روت برای ارسال اعلان برای همه کاربران
+    Route::post('request-withdrawal',[NotificationController::class, 'storeRequestWithdrawal'])->name('notification.store.request.withdrawal')->middleware(['auth:sanctum','permission:notification.store.request.withdrawal']); //این روت برای ارسال اعلان برای درخواست برداشت
 //    Route::put('/{notification}', [\App\Http\Controllers\NotificationController::class, 'update']);
 //    Route::delete('/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy']);
 });
 
 
 Route::group(['prefix' => 'admin'], function () {
+
+    Route::get('show_user_and_bank_info_id/{id}', [UserController::class, 'show_user_and_bank_info_id'])->middleware(['auth:sanctum','permission:user.show.and.bank.info_id'])->name('user.show.and.bank.info_id');
 
     Route::post('date_of_loan/{id}', [LoanController::class, 'date_of_loan'])->name('loan.date')->middleware(['auth:sanctum','permission:loan.date']);
     Route::put('update_status_loan/{id}', [LoanController::class, 'update_status_loan'])->name('loan.update.status ')->middleware(['auth:sanctum','permission:loan.update.status']);;

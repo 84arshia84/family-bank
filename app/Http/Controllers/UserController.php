@@ -215,6 +215,28 @@ class UserController extends Controller
             'user_profile' => $userProfile
         ]);
     }
+    public function show_user_and_bank_info_id ($id)
+    {
+        $user = User::find($id);
+        $userDetails = [
+            'name' => $user->name,
+            'family' => $user->family,
+            'father_name' => $user->father_name,
+            'phone_number' => $user->phone_number,
+            'national_id' => $user->national_id,
+            'created_at' => $user->created_at,
+            'balance' => $user->balance,
+            'status' => $user->status,
+            'email'=>$user->email
+        ];
+        $userBankAccount = $user->bankAccount;
+        $userProfile = $user->getFirstMediaUrl('profile');
+        return response()->json([
+            'user_info' => $userDetails,
+            'user_bank_account' => $userBankAccount,
+            'user_profile' => $userProfile
+        ]);
+    }
     public function showAdmins()
     {
         $admins = User::whereHas('roles', function ($query) {
