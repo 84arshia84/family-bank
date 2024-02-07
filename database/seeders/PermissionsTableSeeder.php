@@ -81,6 +81,7 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'notification.index.user']);
         Permission::create(['name' => 'notification.index']);
         Permission::create(['name' => 'user.show.and.bank.info_id']);
+        Permission::create(['name' => 'all.users.loan.details']);
 
 
 
