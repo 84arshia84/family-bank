@@ -30,7 +30,7 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => 'user.show.details']);    // نمایش جزئیات کاربر
         Permission::create(['name' => 'user.profile.img']); // آپلود عکس پروفایل کاربر
 
-        Permission::create(['name' => 'add.Bank.account']);    // اضافه کردن حساب بانکی
+        Permission::create(['name' => 'add.Bank.account ']);    // اضافه کردن حساب بانکی
 
         Permission::create(['name' => 'loan.add']); // اضافه کردن وام
         Permission::create(['name' => 'loan.delete']); // حذف وام

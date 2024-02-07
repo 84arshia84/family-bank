@@ -205,6 +205,7 @@ class UserController extends Controller
             'created_at' => $user->created_at,
             'balance' => $user->balance,
             'status' => $user->status,
+            'email'=>$user->email
         ];
         $userBankAccount = $user->bankAccount;
         $userProfile = $user->getFirstMediaUrl('profile');
