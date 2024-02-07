@@ -7,12 +7,23 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class NotificationController extends Controller
 {
     public function index(): JsonResponse
     {
         return response()->json($this->notificationIndex());
+    }
+
+    public function storeRequestWithdrawal()
+    {
+        $user = Role::findByName('admin')->users()->first();
+        return response()->json(Notification::create([
+            'date' => today()->toDateString(),
+            'text' => "اینجانب درخواست برداشت وجه دارم.",
+            'user_id' => $user->id
+        ]));
     }
 
     public function store(Request $request): JsonResponse
