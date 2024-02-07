@@ -27,8 +27,11 @@ class LoginController extends Controller
 
         // برگرداندن پاسخ به کلاینت
         return response()->json([
+
             'user' => $user->only(['id', 'name', 'phone_number']), // برگرداندن اطلاعات مهم کاربر
+            'role' => $user->getRoleNames(),
             'token' => $token,
+
         ]);
     }
     public function logout(Request $request)
