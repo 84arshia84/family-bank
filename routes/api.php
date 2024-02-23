@@ -60,7 +60,7 @@ Route::group(['prefix' => 'loan',], function () {
 });
 Route::group(['prefix' => 'wallet'], function () {
     Route::post('store', [WeeklyScheduleController::class, 'store'])->name('store');
-    Route::get('show/{id}', [WeeklyScheduleController::class, 'show'])->middleware(['auth:sanctum'])->name('show');
+    Route::get('show/{id}', [WeeklyScheduleController::class, 'show'])->name('show');
 
 });
 
