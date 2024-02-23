@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('weeklyschedule', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
             $table->string('title');
             $table->string('short_description');
             $table->string('more_details');
@@ -25,8 +24,5 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
-    {
-        Schema::dropIfExists('weeklyschedule');
-    }
+
 };
