@@ -11,6 +11,7 @@ use App\Http\Controllers\paymentController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\WeeklyScheduleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +56,11 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'loan',], function () {
     Route::get('Returning_the_deleted_loan/{id}', [LoanController::class, 'Returning_the_deleted_loan'])->name('Returning.the.deleted.loan');
     Route::get('showPaidLoans', [LoanController::class, 'showPaidLoans'])->name('showPaidLoans');
+
+});
+Route::group(['prefix' => 'wallet'], function () {
+    Route::post('store', [WeeklyScheduleController::class, 'store'])->name('store');
+    Route::get('show/{id}', [WeeklyScheduleController::class, 'show'])->name('show');
 
 });
 

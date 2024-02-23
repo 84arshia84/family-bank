@@ -72,4 +72,8 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOne(BankAccount::class);
     }
+    public function weeklySchedule(): HasOne
+    {
+        return $this->hasOne(WeeklySchedule::class);
+    }
 }
